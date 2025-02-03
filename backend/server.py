@@ -10,7 +10,7 @@ config = DatabaseConfiguration(
     database="chimba",
     host="localhost",
     user="postgres",
-    password="kumar4569",
+    password="hidden-password",
     port="5432"
 )
 
