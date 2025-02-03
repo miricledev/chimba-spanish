@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 from user_db import DBHandler, DatabaseConfiguration
+import bcrypt
 
 app = Flask(__name__)
 CORS(app)
@@ -10,7 +11,7 @@ config = DatabaseConfiguration(
     database="chimba",
     host="localhost",
     user="postgres",
-    password="kumar4569",
+    password="hidden",
     port="5432"
 )
 
@@ -26,16 +27,21 @@ except Exception as e:
 def register():
     form_data = request.json
     
-    # Extracting form details
+    # Extracting form details | Hash password
     first_name = str(form_data['firstName'])
     last_name = str(form_data['lastName'])
     email = str(form_data['email'])
-    password = str(form_data['password'])
+    password = str(form_data['password']).encode()
     phone_number = str(form_data['phone'])
+    
+    # Add salt to password
+    salt = bcrypt.gensalt()
+    # Hash
+    hashed = bcrypt.hashpw(password, salt)
     
     # Adding the new user to the database
     try:
-        handler.register_new_user(email, first_name, last_name, password, phone_number)
+        handler.register_new_user(email, first_name, last_name, hashed, phone_number)
         new_user = handler.verify_user_exists(email)
         response = {"reply": f"{last_name}"}
     except Exception as e:
@@ -45,6 +51,14 @@ def register():
     
     # Send confirmation message
     return jsonify(response)
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    form_data = request.json
+    
+    # Extract form details
+    email = form_data['email']
+    password = form_data['password']
 
 if __name__ == "__main__":
     app.run(debug=True)

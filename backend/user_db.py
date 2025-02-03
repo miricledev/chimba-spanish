@@ -1,5 +1,6 @@
 import psycopg2
 from dataclasses import dataclass
+import bcrypt
 
 
 @dataclass
@@ -61,7 +62,8 @@ class DBHandler:
             # Check where email exists in db and compare with password at given row
             user_row = self.verify_user_exists(email)
             if user_row:
-                if password == user_row[4]:
+                #comparing the encrypted password with the entered one with bcrypt
+                if bcrypt.checkpw(password.encode(), user_row[4]):
                     return True
                 else:
                     raise Exception("Incorrect password")
