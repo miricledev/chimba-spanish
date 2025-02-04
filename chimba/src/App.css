@@ -36,3 +36,43 @@
     transform: rotate(360deg);
   }
 }
+
+form {
+  width: 100%;
+  max-width: 400px;  /* Restrict width for better design */
+  margin: 20px auto; /* Center the form */
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form input, 
+form textarea, 
+form button {
+  width: 100%;  /* Make inputs full width */
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+form input:focus,
+form textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+form button {
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+form button:hover {
+  background: #0056b3;
+}

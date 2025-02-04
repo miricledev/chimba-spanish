@@ -1,8 +1,3 @@
-Fix the database password column to store bytes instead of string so
-that it can be resolved during the login phase using bcrypt
-
-Clear all data in the table users once fixed the above issue
-to be able to add consistent new data that follows the rules
 
 Add stricter scripts for emails, passwords, phone numbers
 - Email checker

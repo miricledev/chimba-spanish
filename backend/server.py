@@ -3,6 +3,8 @@ from flask_cors import CORS
 import json
 from user_db import DBHandler, DatabaseConfiguration
 import bcrypt
+from pyisemail import is_email
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -44,7 +46,7 @@ def register():
         handler.register_new_user(email, first_name, last_name, hashed, phone_number)
         new_user = handler.verify_user_exists(email)
         response = {
-            "reply": f"{last_name}",
+            "reply": f"You are now registered, {first_name}",
             "new user data": f"{new_user}"
                     }
     except Exception as e:
@@ -63,13 +65,37 @@ def login():
     email = str(form_data['email'])
     password = str(form_data['password'])
     
+    # default
+    user_data = None
+    
     try:
         handler.verify_user_login(email, password)
-        response = {"reply": "user logged in"}
+        
+        # get the new users data to send in the response
+        user_data = handler.verify_user_exists(email)
+        response = {
+            "reply": 'logged in',
+            "user_data": 'man'
+            }
     except Exception as e:
         response = {"reply": str(e)}
         
     return jsonify(response)
+
+
+def email_checker(email):
+    detailed_result = is_email(email, diagnose=True)
+    return detailed_result
+    
+def password_checker(password):
+    if len(password) < 8:
+        return ("Make sure your password is at least 8 letters")
+    elif re.search('[0-9]',password) is None:
+        return ("Make sure your password has a number in it")
+    elif re.search('[A-Z]',password) is None: 
+        return ("Make sure your password has a capital letter in it")
+    else:
+        return 'valid'
 
 if __name__ == "__main__":
     app.run(debug=True)

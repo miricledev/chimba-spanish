@@ -1,15 +1,33 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import React from 'react'
 import Register from './components/registration/Register'
 import Login from './components/login/Login'
+import AuthProvider from './components/authorisation/AuthProvider'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import './App.css'
+import AuthorisedPagesProtector from './components/authorisation/AuthorisedPagesProtector'
+import Dashboard from './components/authorised pages/Dashboard'
+import Home from './components/Home'
 
 const App = () => {
 
   return (
     <div>
-      <Register />
-      <hr />
-      <Login />
+      <Router>
+        <AuthProvider>
+            <Routes>
+              <Route path='/'>
+              <Route index element={<Home />} />
+                {/* Authorised routes: will redirect to login if not authorised */}
+                <Route path='1/' element={<AuthorisedPagesProtector />}>
+                  <Route index element={<Dashboard />} />
+                </Route>
+                {/* Un-authorised routes: no user login status checks required (public pages) */}
+                <Route path='login' element={<Login />} />
+                <Route path='register' element={<Register />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
+        </Router>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const Register = () => {
 
@@ -11,6 +12,8 @@ const Register = () => {
     const password = useRef()
     const passwordConfirmed = useRef()
     const phone = useRef()
+
+    const [submissionResponse, setSubmissionResponse] = useState('')
     
 
     const submitForm = (e) => {
@@ -26,7 +29,7 @@ const Register = () => {
                 password: password.current.value,
                 phone: phone.current.value
             }).then(
-                res => console.log(res.data)
+                res => setSubmissionResponse(res.data.reply)
             ).catch(
                 error => console.log(error)
             )
@@ -37,46 +40,56 @@ const Register = () => {
 
   return (
     <div>
-        Register details
+        
         <form>
-            <label>email</label>
+            <h2>Register details</h2>
+            <label>Email Address</label>
             <input 
                 type='text'
                 required
                 ref={email}
             />
-            <label>first name</label>
+            <label>First Name</label>
             <input 
                 type='text'
                 required
                 ref={firstName}
             />
-            <label>last name</label>
+            <label>Last Name</label>
             <input 
                 type='text'
                 required
                 ref={lastName}
             />
-            <label>password</label>
+            <label>Password</label>
             <input 
                 type='text'
                 required
                 ref={password}
             />
-            <label>confirm password</label>
+            <ul>
+                <li>At least 8 characters long</li>
+                <li>Contains at least 1 number</li>
+                <li>Contains at least 1 capital letter</li>
+                <li>Contains at least 1 special character (#, !, @) etc</li>
+            </ul>
+            <label>Confirm Password</label>
             <input 
                 type='text'
                 required
                 ref={passwordConfirmed}
             />
-            <label>phone number</label>
+            <label>Phone Number</label>
             <input 
                 type='tel'
                 required
                 ref={phone}
             />
-            <button onClick={(event) => submitForm(event)}>Submit form</button>
+            <button onClick={(event) => submitForm(event)}>Register</button>
+            {submissionResponse && (<p>{submissionResponse}</p>)}
+            <p>Already have an account? <Link to='/login'>Log in</Link></p>
         </form>
+        
     </div>
   )
 }
