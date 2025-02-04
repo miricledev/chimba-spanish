@@ -43,7 +43,10 @@ def register():
     try:
         handler.register_new_user(email, first_name, last_name, hashed, phone_number)
         new_user = handler.verify_user_exists(email)
-        response = {"reply": f"{last_name}"}
+        response = {
+            "reply": f"{last_name}",
+            "new user data": f"{new_user}"
+                    }
     except Exception as e:
         response = {"reply": str(e)}
         
@@ -57,8 +60,16 @@ def login():
     form_data = request.json
     
     # Extract form details
-    email = form_data['email']
-    password = form_data['password']
+    email = str(form_data['email'])
+    password = str(form_data['password'])
+    
+    try:
+        handler.verify_user_login(email, password)
+        response = {"reply": "user logged in"}
+    except Exception as e:
+        response = {"reply": str(e)}
+        
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.run(debug=True)

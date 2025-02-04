@@ -26,7 +26,9 @@ const Register = () => {
                 password: password.current.value,
                 phone: phone.current.value
             }).then(
-                res => console.log(res.data.reply)
+                res => console.log(res.data)
+            ).catch(
+                error => console.log(error)
             )
         } else{
             console.log("Passwords do not match")

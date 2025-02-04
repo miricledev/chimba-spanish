@@ -63,7 +63,7 @@ class DBHandler:
             user_row = self.verify_user_exists(email)
             if user_row:
                 #comparing the encrypted password with the entered one with bcrypt
-                if bcrypt.checkpw(password.encode(), user_row[4]):
+                if bcrypt.checkpw(password.encode(), user_row[4].tobytes()):
                     return True
                 else:
                     raise Exception("Incorrect password")
