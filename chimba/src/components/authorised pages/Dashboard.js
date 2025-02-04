@@ -9,6 +9,8 @@ const Dashboard = () => {
         Dashboard
         <hr />
         Hello {user}
+        <Link to='flashcards/'>Flashcards</Link>
+        <Link to='map/'>Map</Link>
     </div>
   )
 }

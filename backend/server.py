@@ -82,6 +82,14 @@ def login():
         
     return jsonify(response)
 
+@app.route("/get/terms", methods=['GET'])
+def get_flashcards():
+    flashcards = {'hello': 'hola',
+                  'goodbye': 'adios',
+                  'incredible': 'increíble'
+                  }
+    return jsonify(flashcards)
+
 
 def email_checker(email):
     detailed_result = is_email(email, diagnose=True)
