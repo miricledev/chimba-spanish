@@ -5,10 +5,21 @@ from user_db import DBHandler, DatabaseConfiguration
 import bcrypt
 from pyisemail import is_email
 import re
+import ollama
 
+# Flask setup
 app = Flask(__name__)
 CORS(app)
 
+# Set up Ollama LLM
+# initialise client
+client = ollama.Client()
+# model
+model_type = 'pablo'
+# chat history
+chat = []
+
+# Setup db
 config = DatabaseConfiguration(
     database="chimba",
     host="localhost",
@@ -91,6 +102,31 @@ def get_flashcards():
     return jsonify(flashcards)
 
 
+
+@app.route("/api/ollama", methods=['POST'])
+def communicate_ai():
+    user_message = request.json
+    chat.append(f'User: {user_message['message']}')
+    
+    ai_reply = get_response(user_message['message'], chat)
+    chat.append(f'Pablo: {ai_reply}')
+    
+    ai_reply_pkt = {"reply": ai_reply}
+    
+    return jsonify(ai_reply_pkt)
+
+
+
+@app.route('/api/resetai', methods=['POST'])
+def reset_ai():
+    global chat
+    chat = []
+    
+    return jsonify({'reply': ''})
+        
+
+
+
 def email_checker(email):
     detailed_result = is_email(email, diagnose=True)
     return detailed_result
@@ -104,6 +140,12 @@ def password_checker(password):
         return ("Make sure your password has a capital letter in it")
     else:
         return 'valid'
+    
+def get_response(prompt_message, chat_history):
+    # send message
+    response = client.generate(model=model_type, prompt=f'chat_history: {chat_history} || next_message: {prompt_message}', keep_alive=True)
+    
+    return response.response
 
 if __name__ == "__main__":
     app.run(debug=True)

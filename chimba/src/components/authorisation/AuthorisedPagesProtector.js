@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import { useAuth } from './AuthProvider'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 
 const AuthorisedPagesProtector = () => {
 
@@ -17,6 +17,7 @@ const AuthorisedPagesProtector = () => {
   return user ? (
     <div>
         <button onClick={logout}>Log out</button>
+        <Link to='/1/'>Dashboard</Link>
         <Outlet />
     </div>
   ) : <p>Redirecting to login page</p>

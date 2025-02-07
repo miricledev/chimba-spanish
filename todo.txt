@@ -1,3 +1,8 @@
+Implement into database a unknown words section for each user
+
+Implement a reading comprehension quiz (hard coded for now) and allow user to hover over and click specific words
+to add them to the unknown words so that they can be practiced in the flashcards section
+
 
 Add stricter scripts for emails, passwords, phone numbers
 - Email checker

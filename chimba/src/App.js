@@ -9,6 +9,7 @@ import Dashboard from './components/authorised pages/Dashboard'
 import Home from './components/Home'
 import MapApp from './components/learning/directions/map directions/MapApp'
 import FlashcardApp from './components/learning/flashcards/FlashcardApp'
+import AIChatInterface from './components/learning/AI Chat/AIChatInterface'
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
                   <Route index element={<Dashboard />} />
                   <Route path='flashcards' element={<FlashcardApp />} />
                   <Route path='map' element={<MapApp />} />
+                  <Route path='aichat' element={<AIChatInterface />} />
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='login' element={<Login />} />
