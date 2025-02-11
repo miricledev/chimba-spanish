@@ -12,6 +12,7 @@ const Dashboard = () => {
         <Link to='flashcards/'>Flashcards</Link>
         <Link to='map/'>Map</Link>
         <Link to='aichat/'>AI Chat</Link>
+        <Link to='readingcomp'>Reading</Link>
     </div>
   )
 }

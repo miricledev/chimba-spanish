@@ -10,6 +10,7 @@ import Home from './components/Home'
 import MapApp from './components/learning/directions/map directions/MapApp'
 import FlashcardApp from './components/learning/flashcards/FlashcardApp'
 import AIChatInterface from './components/learning/AI Chat/AIChatInterface'
+import ReadingComp from './components/learning/Comprehension/ReadingComp'
 
 const App = () => {
 
@@ -26,6 +27,7 @@ const App = () => {
                   <Route path='flashcards' element={<FlashcardApp />} />
                   <Route path='map' element={<MapApp />} />
                   <Route path='aichat' element={<AIChatInterface />} />
+                  <Route path='readingcomp' element={<ReadingComp />} />
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='login' element={<Login />} />
