@@ -8,7 +8,7 @@ const Dashboard = () => {
     <div>
         Dashboard
         <hr />
-        Hello {user}
+        Hello {user.firstName}
         <Link to='flashcards/'>Flashcards</Link>
         <Link to='map/'>Map</Link>
         <Link to='aichat/'>AI Chat</Link>

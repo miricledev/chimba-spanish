@@ -86,20 +86,47 @@ def login():
         user_data = handler.verify_user_exists(email)
         response = {
             "reply": 'logged in',
-            "user_data": 'man'
+            "user_data": {'id': user_data[0], 
+                          'firstName': user_data[1],
+                          "lastName": user_data[2],
+                          "email": user_data[3]
+                          }
             }
     except Exception as e:
         response = {"reply": str(e)}
         
     return jsonify(response)
 
-@app.route("/get/terms", methods=['GET'])
+@app.route("/get/terms", methods=['POST'])
 def get_flashcards():
-    flashcards = {'hello': 'hola',
-                  'goodbye': 'adios',
-                  'incredible': 'increíble'
-                  }
-    return jsonify(flashcards)
+    form_data = request.json
+    user_id = form_data['id']
+    try:
+        flashcards = handler.get_all_flashcards(user_id)
+        flashcards = convert_string_tuples(flashcards)
+        print(flashcards, flush=True)
+        response = {key: value for key, value in flashcards}
+        return jsonify(response)
+    except Exception as e:
+        response = {"reply": str(e)}
+        return jsonify(response)
+    
+    
+@app.route('/set/terms', methods=['POST'])
+def insert_flashcards():
+    form_data = request.json
+    term = form_data['term']
+    definition = form_data['definition']
+    user_id = form_data['id']
+    
+    try:
+        handler.insert_new_flashcards(user_id, term, definition)
+        response = {"reply": "success"}
+    except Exception as e:
+        response = {"reply": str(e)}
+        
+    return jsonify(response)
+    
 
 
 
@@ -125,8 +152,6 @@ def reset_ai():
     return jsonify({'reply': ''})
         
 
-
-
 def email_checker(email):
     detailed_result = is_email(email, diagnose=True)
     return detailed_result
@@ -140,6 +165,22 @@ def password_checker(password):
         return ("Make sure your password has a capital letter in it")
     else:
         return 'valid'
+    
+def convert_string_tuples(lst):
+    
+    new_lst = []
+    
+    for item in lst:
+        removed_tuple_layer = item[0]
+        
+        for char in "()":
+            removed_tuple_layer = removed_tuple_layer.replace(char, "")
+            
+        new_lst.append(tuple(removed_tuple_layer.split(',')))
+        
+    return new_lst
+            
+        
     
 def get_response(prompt_message, chat_history):
     # send message

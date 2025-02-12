@@ -4,6 +4,7 @@ import "./Flashcard.css";
 const Flashcard = ({ term, definition, flashcardShown }) => {
   const [side, setSide] = useState(true);
 
+
   const flipSide = () => {
     setSide(prevSide => !prevSide);
   };

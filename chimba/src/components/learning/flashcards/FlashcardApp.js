@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import Flashcard from './Flashcard'
+import { useAuth } from "../../authorisation/AuthProvider";
 
 const FlashcardApp = () => {
 
@@ -11,6 +12,8 @@ const FlashcardApp = () => {
     // count to allow us to navigate through each flashcard
     const [flashcardShown, setFlashcardShown] = useState(0)
 
+    const { user } = useAuth()
+    
     // contains boundaries
     const decrementIndex = () => {
       setFlashcardShown(prevFlashcardShown => {
@@ -26,7 +29,10 @@ const FlashcardApp = () => {
 
         // getting the flashcards from the server
     useEffect(() =>{
-        axios.get('/get/terms').then(
+      console.log(user.id)
+        axios.post('/get/terms', {
+          id: user.id
+        }).then(
             res => {
                 console.log(res.data)  
                 // convert dict key pairs into an array of [[key, pair], [key, pair], [key, pair]]... etc and map over them

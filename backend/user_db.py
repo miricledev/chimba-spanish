@@ -80,6 +80,26 @@ class DBHandler:
     def get_all_rows(self):
         self.cursor.execute("SELECT * FROM users;")
         return self.cursor.fetchall()
+    
+    def insert_new_flashcards(self, user_id, term, definition):
+        if self.verify_connection:
+            self.cursor.execute("SELECT * FROM users WHERE user_id = %s;", (user_id,))
+            if self.cursor.fetchone():
+                query = "INSERT INTO flashcards(user_id, term, definition) VALUES (%s, %s, %s);"
+                values = (user_id, term, definition)
+                self.cursor.execute(query, values)
+                self.connection.commit()
+            else:
+                raise Exception("User with this id does not exist")
+            
+    def get_all_flashcards(self, user_id):
+        if self.verify_connection():
+            self.cursor.execute("SELECT (term, definition) FROM flashcards WHERE user_id = %s;", (user_id,))
+            flashcards = self.cursor.fetchall()
+            if flashcards:
+                return flashcards
+            else:
+                raise Exception("There are no flashcards")
         
     def close(self):
         if self.verify_connection():
