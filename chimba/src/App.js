@@ -20,7 +20,7 @@ const App = () => {
         <AuthProvider>
             <Routes>
               <Route path='/'>
-              <Route index element={<Home />} />
+                <Route index element={<Home />} />
                 {/* Authorised routes: will redirect to login if not authorised */}
                 <Route path='1/' element={<AuthorisedPagesProtector />}>
                   <Route index element={<Dashboard />} />

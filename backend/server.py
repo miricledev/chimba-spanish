@@ -6,10 +6,17 @@ import bcrypt
 from pyisemail import is_email
 import re
 import ollama
+import requests
+from dotenv import load_dotenv
+import os
 
 # Flask setup
 app = Flask(__name__)
 CORS(app)
+
+# DeepL key
+load_dotenv()
+DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 
 # Set up Ollama LLM
 # initialise client
@@ -150,6 +157,34 @@ def reset_ai():
     chat = []
     
     return jsonify({'reply': ''})
+
+@app.route("/translate", methods=["POST"])
+def translate():
+    try:
+        data = request.json
+        text = data['text']
+        target_lang = data['targetLang'] 
+
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+
+        response = requests.post(
+            "https://api-free.deepl.com/v2/translate",
+            data={
+                "auth_key": DEEPL_API_KEY,
+                "text": text,
+                "target_lang": target_lang,
+            },
+        )
+
+      
+        translated_text = response.json()["translations"][0]["text"]
+        print(translated_text, flush=True)
+        return jsonify({"translated_text": translated_text})
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Translation failed"}), 500
         
 
 def email_checker(email):

@@ -1,26 +1,35 @@
-import React, {useEffect} from 'react'
-import { useAuth } from './AuthProvider'
-import { Outlet, Link } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { useAuth } from './AuthProvider';
+import { Outlet, Link } from 'react-router-dom';
+import './Auth.css';
 
 const AuthorisedPagesProtector = () => {
-
-    const {user, logout, redirectIfNotLoggedIn} = useAuth()
-
-    useEffect(() => {
-        console.log('User state on authorised page', user)
-    }, [])
+    const { user, logout, redirectIfNotLoggedIn } = useAuth();
 
     useEffect(() => {
-        redirectIfNotLoggedIn()
-    }, [user])
+        console.log('User state on authorised page', user);
+    }, []);
 
-  return user ? (
-    <div>
-        <button onClick={logout}>Log out</button>
-        <Link to='/1/'>Dashboard</Link>
+    useEffect(() => {
+        redirectIfNotLoggedIn();
+    }, [user]);
+
+    return user ? (
+      <div>
+          <div className="navbar-container">
+            <nav className="navbar">
+                <div className="navbar-links">
+                    <Link to='/1/' className="navbar-link">Dashboard</Link>
+                </div>
+                <button onClick={logout} className="navbar-button">Log Out</button>
+            </nav>
+        </div>
         <Outlet />
-    </div>
-  ) : <p>Redirecting to login page</p>
-}
+      </div>
 
-export default AuthorisedPagesProtector
+    ) : (
+        <p className="redirect-message">Redirecting to login page...</p>
+    );
+};
+
+export default AuthorisedPagesProtector;
