@@ -15,11 +15,13 @@ const AuthorisedPagesProtector = () => {
     }, [user]);
 
     return user ? (
-      <div>
+      <div className='page'>
           <div className="navbar-container">
             <nav className="navbar">
+              
                 <div className="navbar-links">
-                    <Link to='/1/' className="navbar-link">Dashboard</Link>
+                   
+                    <Link to='/1/' className="navbar-link"> <img src='/chimba_logo.png' alt='loading' style={{width: '5rem', height: '5rem'}} /></Link>
                 </div>
                 <button onClick={logout} className="navbar-button">Log Out</button>
             </nav>

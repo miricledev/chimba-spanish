@@ -1,68 +1,196 @@
-/* Dashboard.css */
+/* Import futuristic font */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+/* General Dashboard Container */
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #f3f4f6;
-    padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+  font-family: 'Orbitron', sans-serif;
+  width: 100%;
 }
 
+/* Background Purple Stripes */
+.background-stripes {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.stripe {
+  position: absolute;
+  width: 150px;
+  height: 5px;
+  background: linear-gradient(90deg, transparent, rgba(128, 0, 128, 0.8), transparent);
+  filter: blur(3px);
+  opacity: 0.7;
+  animation: moveStripe 4s infinite linear;
+}
+
+@keyframes moveStripe {
+  0% {
+    transform: translateY(0) translateX(0) rotate(15deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100vw) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+/* Positioning Stripes */
+.stripe:nth-child(1) {
+  top: 80%;
+  left: -20%;
+  animation-duration: 5s;
+}
+
+.stripe:nth-child(2) {
+  top: 60%;
+  left: -10%;
+  animation-duration: 6s;
+}
+
+.stripe:nth-child(3) {
+  top: 30%;
+  left: -30%;
+  animation-duration: 4s;
+}
+
+.stripe:nth-child(4) {
+  top: 90%;
+  left: -40%;
+  animation-duration: 7s;
+}
+
+/* Dashboard Card */
 .dashboard-card {
-    width: 100%;
-    max-width: 600px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0px 0px 40px rgba(128, 0, 128, 0.6);
+  text-align: center;
+  animation: fadeInScale 1s ease-in-out;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(128, 0, 128, 0.3);
+  width: 600px; /* Wider card */
+  max-width: 90%;
+  position: relative;
 }
 
+/* Dashboard Title */
 .dashboard-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #800080;
+  text-shadow: 0px 0px 20px rgba(128, 0, 128, 0.7);
+  animation: pulseText 2s infinite alternate ease-in-out;
 }
 
+/* Glowing Divider */
 .dashboard-divider {
-    border: 1px solid #ddd;
-    margin: 15px 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(128, 0, 128, 0.8), transparent);
+  border: none;
+  margin: 10px auto;
+  box-shadow: 0px 0px 15px rgba(128, 0, 128, 0.6);
 }
 
+/* Greeting */
 .dashboard-greeting {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 20px;
+  font-size: 22px;
+  color: #800080;
+  font-weight: bold;
+  text-shadow: 0px 0px 10px rgba(128, 0, 128, 0.5);
 }
 
+/* Glowing Links */
 .dashboard-links {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+/* Futuristic Buttons */
 .dashboard-link {
-    display: block;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 8px;
-    color: white;
-    transition: background-color 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #800080;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 14px 25px;
+  border-radius: 10px;
+  border: 2px solid rgba(128, 0, 128, 0.5);
+  box-shadow: 0px 0px 20px rgba(128, 0, 128, 0.6);
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
-.flashcards-link { background-color: #3b82f6; }
-.flashcards-link:hover { background-color: #2563eb; }
+/* Button Hover Effects */
+.dashboard-link:hover {
+  color: white;
+  background: rgba(128, 0, 128, 0.9);
+  box-shadow: 0px 0px 25px rgba(128, 0, 128, 1);
+  transform: scale(1.05);
+}
 
-.map-link { background-color: #10b981; }
-.map-link:hover { background-color: #059669; }
+/* Unique Hover Effects */
+.flashcards-link:hover {
+  background: rgba(0, 0, 255, 0.7);
+  box-shadow: 0px 0px 25px rgba(0, 0, 255, 0.8);
+}
 
-.ai-chat-link { background-color: #8b5cf6; }
-.ai-chat-link:hover { background-color: #7c3aed; }
+.map-link:hover {
+  background: rgba(255, 0, 0, 0.7);
+  box-shadow: 0px 0px 25px rgba(255, 0, 0, 0.8);
+}
 
-.reading-link { background-color: #f59e0b; }
-.reading-link:hover { background-color: #d97706; }
+.ai-chat-link:hover {
+  background: rgba(0, 255, 0, 0.7);
+  box-shadow: 0px 0px 25px rgba(0, 255, 0, 0.8);
+}
+
+.reading-link:hover {
+  background: rgba(255, 165, 0, 0.7);
+  box-shadow: 0px 0px 25px rgba(255, 165, 0, 0.8);
+}
+
+/* Smooth Entrance Animation */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Subtle Pulsing Effect */
+@keyframes pulseText {
+  from {
+    text-shadow: 0px 0px 10px rgba(128, 0, 128, 0.5);
+  }
+  to {
+    text-shadow: 0px 0px 25px rgba(128, 0, 128, 1);
+  }
+}
+
+/* Mobile Friendly */
+@media (max-width: 600px) {
+  .dashboard-card {
+    width: 90%;
+  }
+}

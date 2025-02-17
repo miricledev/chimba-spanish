@@ -40,24 +40,26 @@ const FlashcardApp = () => {
     };
 
     return !loading ? (
-        <div className="flashcard-app">
+      <div className="flashcard-app">
+          {/* Background Curved Stripes */}
+          
           <h2>Flashcards</h2>
-            {flashcardSet[flashcardShown]}
-
-            <div className="nav-buttons">
-                <IconContext.Provider value={{ className: "nav-button" }}>
-                    <button onClick={decrementIndex}><FaArrowCircleLeft /></button>
-                    <button onClick={incrementIndex}><FaArrowCircleRight /></button>
-                </IconContext.Provider>
-            </div>
-
-            <p className="flashcard-counter">{`${flashcardShown + 1}/${flashcardSet.length}`}</p>
-
-            <IconContext.Provider value={{ className: "shuffle-button" }}>
-                <button onClick={() => setFlashcardSet(prev => shuffle([...prev]))}><FaShuffle /></button>
-            </IconContext.Provider>
-        </div>
-    ) : <p className="loading-text">Loading...</p>;
+          {flashcardSet[flashcardShown]}
+  
+          <div className="nav-buttons">
+              <IconContext.Provider value={{ className: "nav-button" }}>
+                  <button onClick={decrementIndex}><FaArrowCircleLeft /></button>
+                  <button onClick={incrementIndex}><FaArrowCircleRight /></button>
+              </IconContext.Provider>
+          </div>
+  
+          <p className="flashcard-counter">{`${flashcardShown + 1}/${flashcardSet.length}`}</p>
+  
+          <IconContext.Provider value={{ className: "shuffle-button" }}>
+              <button onClick={() => setFlashcardSet(prev => shuffle([...prev]))}><FaShuffle /></button>
+          </IconContext.Provider>
+      </div>
+  ) : <p className="loading-text">Loading...</p>;
 };
 
 export default FlashcardApp;

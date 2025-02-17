@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../authorisation/AuthProvider'
+import './Login.css'
 
 const Login = () => {
 
@@ -56,18 +57,30 @@ const Login = () => {
   }
 
   return (
-    <div>
-      
-      <form>
-        <h2>Login:</h2>
-        <input type='text' placeholder='email' ref={email} />
-        <input type='password' placeholder='password' ref={password} />
-        <button onClick={(event) => handleLogin(event)}>Log in</button>
-        {loginResponse && (<p style={errorStyle}>{loginResponse}</p>)}
-        <p>No account registered? <Link to='/register'>Register here</Link></p>
-      </form>
+    <div className="background-rays">
+      {/* Background floating purple rays */}
+      <div className="ray"></div>
+      <div className="ray"></div>
+      <img src='chimba_logo.png' alt='noimg' />
+            {/* Login Form */}
+      <div className="container">
+        <form>
+          <h2>Login:</h2>
+          <input type='text' placeholder='email' ref={email} />
+          <input type='password' placeholder='password' ref={password} />
+          <button onClick={(event) => handleLogin(event)}>Log in</button>
+          {loginResponse && (<p style={errorStyle}>{loginResponse}</p>)}
+          <p>No account registered? <Link to='/register'>Register here</Link></p>
+        </form>
+      </div>
+      <div className="ray"></div>
+      <div className="ray"></div>
+  
+
+
     </div>
-  )
+  );
+  
 }
 
 export default Login;

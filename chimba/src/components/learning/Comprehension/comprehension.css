@@ -105,12 +105,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50%;
+    height: 100%;
 }
 
 .reading-comp{
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 /* Container for the entire component */

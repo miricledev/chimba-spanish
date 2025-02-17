@@ -7,10 +7,11 @@ import './App.css'
 import AuthorisedPagesProtector from './components/authorisation/AuthorisedPagesProtector'
 import Dashboard from './components/authorised pages/Dashboard'
 import Home from './components/Home'
-import MapApp from './components/learning/directions/map directions/MapApp'
+import MapApp from './components/learning/directions/MapApp'
 import FlashcardApp from './components/learning/flashcards/FlashcardApp'
 import AIChatInterface from './components/learning/AI Chat/AIChatInterface'
 import ReadingComp from './components/learning/Comprehension/ReadingComp'
+import FindUsers from './components/chats/FindUsers'
 
 const App = () => {
 
@@ -28,6 +29,7 @@ const App = () => {
                   <Route path='map' element={<MapApp />} />
                   <Route path='aichat' element={<AIChatInterface />} />
                   <Route path='readingcomp' element={<ReadingComp />} />
+                  <Route path='findusers' element={<FindUsers />} />
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='login' element={<Login />} />
