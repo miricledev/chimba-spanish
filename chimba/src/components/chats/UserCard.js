@@ -1,14 +1,19 @@
 import React from 'react'
 import './chats.css'
 import { useAuth } from '../authorisation/AuthProvider'
+import { useNavigate } from 'react-router-dom'
 
 const UserCard = ({user_id, firstName, lastName, image}) => {
 
     const { user } = useAuth()
 
+    const navigator = useNavigate()
+
     const getIDs = () => {
-      const loggedInUserID = user.id
-      const selectedUserID = user_id
+        const loggedInUserID = user.id
+        const selectedUserID = user_id
+
+        return navigator(`/1/chats/${loggedInUserID}/${selectedUserID}`)
     }
 
     return (

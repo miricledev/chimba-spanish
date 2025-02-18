@@ -86,3 +86,27 @@ body {
   box-shadow: 0px 0px 20px rgba(128, 0, 128, 1);
   transform: scale(1.1);
 }
+
+.chat-int{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10rem;
+}
+
+.message-container{
+    width: 100%;
+    max-width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(128, 0, 128, 0.3);
+    box-shadow: 0px 0px 20px rgba(128, 0, 128, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scroll-behavior: smooth;
+}
