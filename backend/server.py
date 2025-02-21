@@ -1,5 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session, redirect
 from flask_cors import CORS
+from flask_socketio import join_room, leave_room, send, SocketIO
+import random
+from string import ascii_uppercase
 import json
 from user_db import DBHandler, DatabaseConfiguration
 import bcrypt
@@ -14,6 +17,9 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+# SocketIO integration
+socketio = SocketIO(app,  cors_allowed_origins="*", async_mode="eventlet")
+
 # DeepL key
 load_dotenv()
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
@@ -25,6 +31,10 @@ client = ollama.Client()
 model_type = 'pablo'
 # chat history
 chat = []
+
+# For storing connected users
+users = {}
+
 
 # Setup db
 config = DatabaseConfiguration(
@@ -185,9 +195,61 @@ def translate():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Translation failed"}), 500
+    
+@app.route('/users/getall', methods=['GET'])
+def get_all_users():
+    print("get all users", flush=True)
+    try:
+        all_users_tpl = handler.get_all_rows()
+        
+        all_users_tpl = convert_string_tuples(all_users_tpl)
+        
+        print(all_users_tpl, flush=True)
+        # Takes the list of tuples and returns a dict with an index and the tuple converted to list for jsonify
+        all_users_dict = {index: list(attributes) for index, attributes in enumerate(all_users_tpl)}
+        
+        return jsonify(all_users_dict)
+        
+    except Exception as e:
+        print(e, flush=True)
+        
+        return jsonify({"error": str(e)})
+    
+@socketio.on("connect")
+def handle_connect():
+    print(f"user connected: {request.sid}")
+    
+@socketio.on("disconnect")
+def handle_disconnect():
+    print(f"User disconnected: {request.sid}")
+    
+@socketio.on("join")
+def handle_join(data):
+    user_id = data['user_id']
+    chat_url = data['chat_url']
+    join_room(chat_url)
+    users[user_id] = request.sid
+    print(f"User {user_id} joined room {chat_url}", flush=True)
+    
+@socketio.on("leave")
+def handle_leave(data):
+    user_id = data["user_id"]
+    chat_url = data["chat_url"]
+    leave_room(chat_url)
+    print(f"User {user_id} left room {chat_url}")
+    
+@socketio.on("message")
+def handle_message(data):
+    chat_url = data["chat_url"]
+    message = data["message"]
+    sender = data["sender"]
+    
+    print(f"Message from {sender}: {message} in room {chat_url}")
+    send({"sender": sender, "message": message}, room=chat_url)
         
 
 def email_checker(email):
+    
     detailed_result = is_email(email, diagnose=True)
     return detailed_result
     
@@ -224,4 +286,4 @@ def get_response(prompt_message, chat_history):
     return response.response
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)

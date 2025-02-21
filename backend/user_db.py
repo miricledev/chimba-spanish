@@ -78,8 +78,9 @@ class DBHandler:
         return False
     
     def get_all_rows(self):
-        self.cursor.execute("SELECT * FROM users;")
-        return self.cursor.fetchall()
+        if self.verify_connection():
+            self.cursor.execute("SELECT (user_id, firstname, lastname) FROM users;")
+            return self.cursor.fetchall()
     
     def insert_new_flashcards(self, user_id, term, definition):
         if self.verify_connection:
