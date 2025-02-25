@@ -3,6 +3,7 @@ import { useAuth } from '../authorisation/AuthProvider';
 import { Link } from 'react-router-dom';
 import './Dashboard.css';
 
+
 const Dashboard = () => {
     const { user } = useAuth();
 
@@ -28,6 +29,7 @@ const Dashboard = () => {
                   <Link to="aichat/" className="dashboard-link ai-chat-link">AI Chat</Link>
                   <Link to="readingcomp" className="dashboard-link reading-link">Reading</Link>
                   <Link to="findusers" className="">Users</Link>
+                  
               </div>
           </div>
       </div>

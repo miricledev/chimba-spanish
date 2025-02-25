@@ -12,6 +12,7 @@ import ollama
 import requests
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 # Flask setup
 app = Flask(__name__)
@@ -52,6 +53,8 @@ try:
 except Exception as e:
     app.logger.info(e)
     exit()
+    
+# REST API Handling ----------------------------------------------------------------------------------------------------------
 
 @app.route("/api/register", methods=["POST"])
 def register():
@@ -215,6 +218,23 @@ def get_all_users():
         
         return jsonify({"error": str(e)})
     
+    
+    
+# GET all chats for user x, SET all chats to read
+@app.route('/chats/get', methods=['POST'])
+def load_all_chats():
+    data = request.json
+    room_id = data['room_id']
+    try:
+        chat_log = handler.get_chat_log(room_id)
+        if chat_log:
+            ...
+    except Exception as e:
+        ...
+    
+    
+# Socket IO functions ------------------------------------------------------------------------------------------------------------
+    
 @socketio.on("connect")
 def handle_connect():
     print(f"user connected: {request.sid}")
@@ -227,8 +247,14 @@ def handle_disconnect():
 def handle_join(data):
     user_id = data['user_id']
     chat_url = data['chat_url']
+    room = data['room_id']
     join_room(chat_url)
     users[user_id] = request.sid
+    chat_log = handler.get_chat_log(room)
+    print(chat_log, flush=True)
+    formatted_chat_log = format_message_response(chat_log)
+    print(f"\nLoaded chats:\n\n{formatted_chat_log}\n\n")
+    socketio.emit('loadChats', formatted_chat_log)
     print(f"User {user_id} joined room {chat_url}", flush=True)
     
 @socketio.on("leave")
@@ -241,11 +267,24 @@ def handle_leave(data):
 @socketio.on("message")
 def handle_message(data):
     chat_url = data["chat_url"]
-    message = data["message"]
-    sender = data["sender"]
+    message = data["message_content"]
+    sender = data["sender_id"]
+    receiver = data['receiver_id']
+    room = data['room_id']
+    time_now = datetime.now().strftime("%H:%M")
+    
+    handler.add_message(room_id=room, sender_id=sender, receiver_id=receiver, message_content=message)
     
     print(f"Message from {sender}: {message} in room {chat_url}")
-    send({"sender": sender, "message": message}, room=chat_url)
+    send({"sender_id": sender, "message_contents": message, "time": time_now}, room=chat_url)
+    
+@socketio.on('messagesSeen')
+def view_message(data):
+    receiver_id = data['user_id']
+    handler.read_message(receiver_id)
+    
+
+# General purpose funcions -----------------------------------------------------------------------------------------------------
         
 
 def email_checker(email):
@@ -276,14 +315,36 @@ def convert_string_tuples(lst):
         new_lst.append(tuple(removed_tuple_layer.split(',')))
         
     return new_lst
+
+def format_message_response(message_tuple_array):
+    dict_arr = []
+    for message_tuple in message_tuple_array:
+        dt_obj = message_tuple[5]
+        date = dt_obj.strftime("%Y-%m-%d")
+        time = dt_obj.strftime("%H:%M")
+        dict_msg = {
+            'message_id': message_tuple[0], 
+            'sender_id': message_tuple[1],
+            'receiver_id': message_tuple[2],
+            'message_contents': message_tuple[3],
+            'room_id': message_tuple[4],
+            'date': date,
+            'time': time,
+            'receiver_has_read': message_tuple[-1]
+        }
+        dict_arr.append(dict_msg)
+    return dict_arr
             
-        
+
+# Ollama client functions ------------------------------------------------------------------------------------------------
     
 def get_response(prompt_message, chat_history):
     # send message
     response = client.generate(model=model_type, prompt=f'chat_history: {chat_history} || next_message: {prompt_message}', keep_alive=True)
     
     return response.response
+
+# -----------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

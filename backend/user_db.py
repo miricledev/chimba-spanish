@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import bcrypt
 
 
+
 @dataclass
 class DatabaseConfiguration:
     database: str
@@ -10,14 +11,19 @@ class DatabaseConfiguration:
     user: str
     password: str
     port: str
-    
-    
+      
+
 
 class DBHandler:
+    
+    
+    
     def __init__(self, configuration: DatabaseConfiguration):
         self.configuration = configuration
         self.connection = None
         self.cursor = None
+        
+        
     
     def connect(self):
         try:
@@ -32,12 +38,16 @@ class DBHandler:
             self.cursor = self.connection.cursor()
         except Exception as error:
             raise Exception(f'Error connecting to the database: {error}')
+        
+        
             
     # Use before any database operation
     def verify_connection(self):
         if self.connection and self.cursor:
             return True
         return False
+    
+    
             
     def register_new_user(self, email, first_name, last_name, password, phone_number):
         if self.verify_connection():
@@ -56,6 +66,8 @@ class DBHandler:
                     raise Exception("Missing empty fields")
             else:
                 raise Exception("A user with this email address already exists")
+            
+            
         
     def verify_user_login(self, email, password):
         if self.verify_connection():
@@ -69,6 +81,8 @@ class DBHandler:
                     raise Exception("Incorrect password")
             else:
                 raise Exception("No account with this email exists")
+            
+            
         
     def verify_user_exists(self, email):
         self.cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
@@ -77,10 +91,14 @@ class DBHandler:
             return user
         return False
     
+    
+    
     def get_all_rows(self):
         if self.verify_connection():
             self.cursor.execute("SELECT (user_id, firstname, lastname) FROM users;")
             return self.cursor.fetchall()
+        
+        
     
     def insert_new_flashcards(self, user_id, term, definition):
         if self.verify_connection:
@@ -93,6 +111,8 @@ class DBHandler:
             else:
                 raise Exception("User with this id does not exist")
             
+            
+            
     def get_all_flashcards(self, user_id):
         if self.verify_connection():
             self.cursor.execute("SELECT (term, definition) FROM flashcards WHERE user_id = %s;", (user_id,))
@@ -101,6 +121,61 @@ class DBHandler:
                 return flashcards
             else:
                 raise Exception("There are no flashcards")
+            
+            
+            
+    # Run when user enters a chat to receive message history
+    def get_chat_log(self, room_id):
+        if self.verify_connection():
+            try:
+                self.cursor.execute("SELECT * FROM messages WHERE room_number = %s ORDER BY datetime_sent ASC;", (room_id,))
+                messages = self.cursor.fetchall()
+                if messages:
+                    return messages
+                else:
+                    return False
+            except Exception as e:
+                raise Exception(e)
+            
+            
+            
+    # Used for notifying users if there are unread messages
+    def get_unread_messages(self, user_id):
+        if self.verify_connection():
+            try: 
+                self.cursor.execute("SELECT * FROM messages WHERE receiver_id = %s AND receiver_read_message = false;", (user_id,))
+                unread_messages = self.cursor.fetchall()
+                if unread_messages:
+                    return unread_messages
+                else:
+                    return False
+            except Exception as e:
+                raise Exception(e)
+            
+            
+            
+    # Used to set a received message to 'seen'
+    def read_message(self, user_id):
+        if self.verify_connection():
+            try:
+                self.cursor.execute("UPDATE messages SET receiver_read_message = true WHERE receiver_id = %s;", (user_id,))
+                self.connection.commit()
+            except Exception as e:
+                raise Exception(e)
+            
+            
+            
+    def add_message(self, sender_id, room_id, receiver_id, message_content):
+        if self.verify_connection():
+            query = "INSERT INTO messages (sender_id, receiver_id, room_number, message_contents) VALUES (%s, %s, %s, %s);"
+            values = (sender_id, receiver_id, room_id, message_content)
+            try:
+                self.cursor.execute(query, values)
+                self.connection.commit()
+            except Exception as e:
+                raise Exception(e)
+            
+            
         
     def close(self):
         if self.verify_connection():

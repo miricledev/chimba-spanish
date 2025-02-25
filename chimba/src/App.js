@@ -13,6 +13,7 @@ import AIChatInterface from './components/learning/AI Chat/AIChatInterface'
 import ReadingComp from './components/learning/Comprehension/ReadingComp'
 import FindUsers from './components/chats/FindUsers'
 import ChatInterface from './components/chats/ChatInterface'
+import Inbox from './components/chats/Inbox'
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
                   <Route path='readingcomp' element={<ReadingComp />} />
                   <Route path='findusers' element={<FindUsers />} />
                   <Route path='chats/:id1/:id2' element={<ChatInterface />} />
+                  <Route path='inbox' element={<Inbox />} />
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='login' element={<Login />} />
