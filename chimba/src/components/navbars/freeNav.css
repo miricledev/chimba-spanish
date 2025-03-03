@@ -1,0 +1,30 @@
+.main-container{
+    background-color: rgb(0, 0, 0);
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100vw;
+}
+
+.link{
+    text-decoration: none;
+    padding: 9px;
+    border-radius: 5px;
+    color: white;
+    background: linear-gradient(135deg, #800080, #B266FF);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    font-size: 20px;
+    font-weight: bolder;
+    width: 20px;
+}
+
+.link:hover{
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(128, 0, 128, 0.4);
+}
+

@@ -2,6 +2,7 @@ import React from 'react'
 import { useRef, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import './register.css'
 
 const Register = () => {
 
@@ -39,57 +40,58 @@ const Register = () => {
     }
 
   return (
-    <div>
-        
-        <form>
-            <h2>Register details</h2>
-            <label>Email Address</label>
-            <input 
-                type='text'
-                required
-                ref={email}
-            />
-            <label>First Name</label>
-            <input 
-                type='text'
-                required
-                ref={firstName}
-            />
-            <label>Last Name</label>
-            <input 
-                type='text'
-                required
-                ref={lastName}
-            />
-            <label>Password</label>
-            <input 
-                type='text'
-                required
-                ref={password}
-            />
-            <ul>
-                <li>At least 8 characters long</li>
-                <li>Contains at least 1 number</li>
-                <li>Contains at least 1 capital letter</li>
-                <li>Contains at least 1 special character (#, !, @) etc</li>
-            </ul>
-            <label>Confirm Password</label>
-            <input 
-                type='text'
-                required
-                ref={passwordConfirmed}
-            />
-            <label>Phone Number</label>
-            <input 
-                type='tel'
-                required
-                ref={phone}
-            />
-            <button onClick={(event) => submitForm(event)}>Register</button>
-            {submissionResponse && (<p>{submissionResponse}</p>)}
-            <p>Already have an account? <Link to='/login'>Log in</Link></p>
+    <div className='form-container'>
+        <h2>Register details</h2>
+        <form className='form-box'>
+            <div className='side-register'>
+
+                
+                <label>Email Address</label>
+                <input 
+                    type='text'
+                    required
+                    ref={email}
+                />
+                <label>First Name</label>
+                <input 
+                    type='text'
+                    required
+                    ref={firstName}
+                />
+                <label>Last Name</label>
+                <input 
+                    type='text'
+                    required
+                    ref={lastName}
+                />
+            </div>
+            <div className='side-register'>
+
+                <label>Password</label>
+                <input 
+                    type='text'
+                    required
+                    ref={password}
+                />
+                <label>Confirm Password</label>
+                <input 
+                    type='text'
+                    required
+                    ref={passwordConfirmed}
+                />
+                <label>Phone Number</label>
+                <input 
+                    type='tel'
+                    required
+                    ref={phone}
+                />
+                
+                {submissionResponse && (<p>{submissionResponse}</p>)}
+                
+            </div>
         </form>
-        
+        <button onClick={(event) => submitForm(event)}>Register</button>
+        <p>Already have an account? <Link to='/login'>Log in</Link></p>
     </div>
   )
 }
