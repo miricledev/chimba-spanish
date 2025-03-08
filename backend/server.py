@@ -1,43 +1,37 @@
-from flask import Flask, request, jsonify, session, redirect
-from flask_cors import CORS
-from flask_socketio import join_room, leave_room, send, SocketIO
-import random
-from string import ascii_uppercase
-import json
-from user_db import DBHandler, DatabaseConfiguration
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi_socketio import SocketManager
+from contextlib import asynccontextmanager
+from pydantic import BaseModel
+import asyncpg
 import bcrypt
-from pyisemail import is_email
 import re
 import ollama
 import requests
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 from datetime import datetime
 
-# Flask setup
-app = Flask(__name__)
-CORS(app)
+# Import the database handler
+from user_db import DBHandler, DatabaseConfiguration
 
-# SocketIO integration
-socketio = SocketIO(app,  cors_allowed_origins="*", async_mode="eventlet")
-
-# DeepL key
+# Load environment variables
 load_dotenv()
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 
-# Set up Ollama LLM
-# initialise client
+
+
+
+
+# AI Model Setup
 client = ollama.Client()
-# model
-model_type = 'pablo'
-# chat history
+model_type = "pablo"
 chat = []
 
-# For storing connected users
+# Store connected users
 users = {}
 
-
-# Setup db
+# Database configuration
 config = DatabaseConfiguration(
     database="chimba",
     host="localhost",
@@ -48,303 +42,222 @@ config = DatabaseConfiguration(
 
 handler = DBHandler(config)
 
-try:
-    handler.connect()
-except Exception as e:
-    app.logger.info(e)
-    exit()
-    
-# REST API Handling ----------------------------------------------------------------------------------------------------------
+@asynccontextmanager
+async def lifespan_context(app: FastAPI):
+    """Lifecycle manager for FastAPI startup and shutdown."""
+    print("🔌 Connecting to the database...")
+    await handler.connect()  # Connect to DB when FastAPI starts
+    yield
+    print("🛑 Closing database connection...")
+    await handler.close()  # Close DB connection when FastAPI stops
 
-@app.route("/api/register", methods=["POST"])
-def register():
-    form_data = request.json
-    
-    # Extracting form details | Hash password
-    first_name = str(form_data['firstName'])
-    last_name = str(form_data['lastName'])
-    email = str(form_data['email'])
-    password = str(form_data['password']).encode()
-    phone_number = str(form_data['phone'])
-    
-    # Add salt to password
+# Initialize FastAPI with lifespan
+app = FastAPI(lifespan=lifespan_context)
+
+# Enable CORS for WebSocket connections
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this for production security
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Add FastAPI-SocketIO
+socket_manager = SocketManager(app=app)
+
+@app.get("/")
+async def root():
+    return {"message": "FastAPI server is running"}
+
+
+# -------------------- MODELS --------------------
+
+class RegisterRequest(BaseModel):
+    firstName: str
+    lastName: str
+    email: str
+    password: str
+    phone: str
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class TranslateRequest(BaseModel):
+    text: str
+    targetLang: str
+
+class FlashcardRequest(BaseModel):
+    term: str
+    definition: str
+    id: int
+
+class AIMessageRequest(BaseModel):
+    message: str
+
+class ChatMessageRequest(BaseModel):
+    chat_url: str
+    message_content: str
+    sender_id: int
+    receiver_id: int
+    room_id: int
+
+class ViewMessageRequest(BaseModel):
+    user_id: int
+
+# -------------------- REST API ROUTES --------------------
+
+@app.post("/api/register")
+async def register(request: RegisterRequest):
+    password = request.password.encode()
     salt = bcrypt.gensalt()
-    # Hash
     hashed = bcrypt.hashpw(password, salt)
     
-    # Adding the new user to the database
     try:
-        handler.register_new_user(email, first_name, last_name, hashed, phone_number)
-        new_user = handler.verify_user_exists(email)
-        response = {
-            "reply": f"You are now registered, {first_name}",
-            "new user data": f"{new_user}"
-                    }
+        await handler.register_new_user(request.email, request.firstName, request.lastName, hashed, request.phone)
+        new_user = await handler.verify_user_exists(request.email)
+        return {"reply": f"You are now registered, {request.firstName}", "new_user_data": new_user}
     except Exception as e:
-        response = {"reply": str(e)}
-        
-    #response = {"reply": f"{new_user}"}
-    
-    # Send confirmation message
-    return jsonify(response)
+        return {"reply": str(e)}
 
-@app.route("/api/login", methods=["POST"])
-def login():
-    form_data = request.json
-    
-    # Extract form details
-    email = str(form_data['email'])
-    password = str(form_data['password'])
-    
-    # default
-    user_data = None
-    
+@app.post("/api/login")
+async def login(request: LoginRequest):
     try:
-        handler.verify_user_login(email, password)
-        
-        # get the new users data to send in the response
-        user_data = handler.verify_user_exists(email)
-        response = {
-            "reply": 'logged in',
-            "user_data": {'id': user_data[0], 
-                          'firstName': user_data[1],
-                          "lastName": user_data[2],
-                          "email": user_data[3]
-                          }
-            }
+        await handler.verify_user_login(request.email, request.password)
+        user_data = await handler.verify_user_exists(request.email)
+        return {
+            "reply": "logged in",
+            "user_data": {
+                "id": user_data[0],
+                "firstName": user_data[1],
+                "lastName": user_data[2],
+                "email": user_data[3],
+            },
+        }
     except Exception as e:
-        response = {"reply": str(e)}
-        
-    return jsonify(response)
+        return {"reply": str(e)}
 
-@app.route("/get/terms", methods=['POST'])
-def get_flashcards():
-    form_data = request.json
-    user_id = form_data['id']
+@app.post("/get/terms")
+async def get_flashcards(request: ViewMessageRequest):
     try:
-        flashcards = handler.get_all_flashcards(user_id)
-        flashcards = convert_string_tuples(flashcards)
-        print(flashcards, flush=True)
-        response = {key: value for key, value in flashcards}
-        return jsonify(response)
+        flashcards = await handler.get_all_flashcards(request.user_id)
+        return {key: value for key, value in convert_string_tuples(flashcards)}
     except Exception as e:
-        response = {"reply": str(e)}
-        return jsonify(response)
-    
-    
-@app.route('/set/terms', methods=['POST'])
-def insert_flashcards():
-    form_data = request.json
-    term = form_data['term']
-    definition = form_data['definition']
-    user_id = form_data['id']
-    
+        return {"reply": str(e)}
+
+@app.post("/set/terms")
+async def insert_flashcards(request: FlashcardRequest):
     try:
-        handler.insert_new_flashcards(user_id, term, definition)
-        response = {"reply": "success"}
+        await handler.insert_new_flashcards(request.id, request.term, request.definition)
+        return {"reply": "success"}
     except Exception as e:
-        response = {"reply": str(e)}
-        
-    return jsonify(response)
-    
+        return {"reply": str(e)}
 
-
-
-@app.route("/api/ollama", methods=['POST'])
-def communicate_ai():
-    user_message = request.json
-    chat.append(f'User: {user_message['message']}')
-    
-    ai_reply = get_response(user_message['message'], chat)
+@app.post("/api/ollama")
+async def communicate_ai(request: AIMessageRequest):
+    chat.append(f'User: {request.message}')
+    ai_reply = get_response(request.message, chat)
     chat.append(f'Pablo: {ai_reply}')
-    
-    ai_reply_pkt = {"reply": ai_reply}
-    
-    return jsonify(ai_reply_pkt)
+    return {"reply": ai_reply}
 
-
-
-@app.route('/api/resetai', methods=['POST'])
-def reset_ai():
+@app.post("/api/resetai")
+async def reset_ai():
     global chat
     chat = []
-    
-    return jsonify({'reply': ''})
+    return {"reply": ""}
 
-@app.route("/translate", methods=["POST"])
-def translate():
+@app.post("/translate")
+async def translate(request: TranslateRequest):
     try:
-        data = request.json
-        text = data['text']
-        target_lang = data['targetLang'] 
-
-        if not text:
-            return jsonify({"error": "No text provided"}), 400
-
         response = requests.post(
             "https://api-free.deepl.com/v2/translate",
-            data={
-                "auth_key": DEEPL_API_KEY,
-                "text": text,
-                "target_lang": target_lang,
-            },
+            data={"auth_key": DEEPL_API_KEY, "text": request.text, "target_lang": request.targetLang},
         )
-
-      
         translated_text = response.json()["translations"][0]["text"]
-        print(translated_text, flush=True)
-        return jsonify({"translated_text": translated_text})
+        return {"translated_text": translated_text}
+    except Exception as e:
+        return {"error": "Translation failed"}
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Translation failed"}), 500
-    
-@app.route('/users/getall', methods=['GET'])
-def get_all_users():
-    print("get all users", flush=True)
+@app.get("/users/getall")
+async def get_all_users():
     try:
-        all_users_tpl = handler.get_all_rows()
-        
-        all_users_tpl = convert_string_tuples(all_users_tpl)
-        
-        print(all_users_tpl, flush=True)
-        # Takes the list of tuples and returns a dict with an index and the tuple converted to list for jsonify
-        all_users_dict = {index: list(attributes) for index, attributes in enumerate(all_users_tpl)}
-        
-        return jsonify(all_users_dict)
-        
+        all_users = await handler.get_all_rows()
+        return {index: list(attributes) for index, attributes in enumerate(convert_string_tuples(all_users))}
     except Exception as e:
-        print(e, flush=True)
-        
-        return jsonify({"error": str(e)})
-    
-    
-    
-# GET all chats for user x, SET all chats to read
-@app.route('/chats/get', methods=['POST'])
-def load_all_chats():
-    data = request.json
-    room_id = data['room_id']
-    try:
-        chat_log = handler.get_chat_log(room_id)
-        if chat_log:
-            ...
-    except Exception as e:
-        ...
-    
-    
-# Socket IO functions ------------------------------------------------------------------------------------------------------------
-    
-@socketio.on("connect")
-def handle_connect():
-    print(f"user connected: {request.sid}")
-    
-@socketio.on("disconnect")
-def handle_disconnect():
-    print(f"User disconnected: {request.sid}")
-    
-@socketio.on("join")
-def handle_join(data):
-    user_id = data['user_id']
-    chat_url = data['chat_url']
-    room = data['room_id']
-    join_room(chat_url)
-    users[user_id] = request.sid
-    chat_log = handler.get_chat_log(room)
-    print(chat_log, flush=True)
-    formatted_chat_log = format_message_response(chat_log)
-    print(f"\nLoaded chats:\n\n{formatted_chat_log}\n\n")
-    socketio.emit('loadChats', formatted_chat_log)
-    print(f"User {user_id} joined room {chat_url}", flush=True)
-    
-@socketio.on("leave")
-def handle_leave(data):
+        return {"error": str(e)}
+
+# -------------------- SOCKET.IO EVENTS --------------------
+
+@socket_manager.on("connect")
+async def handle_connect(sid, environ):
+    print(f"user connected: {sid}")
+
+@socket_manager.on("disconnect")
+async def handle_disconnect(sid):
+    print(f"User disconnected: {sid}")
+
+@socket_manager.on("join")
+async def handle_join(sid, data):
     user_id = data["user_id"]
     chat_url = data["chat_url"]
-    leave_room(chat_url)
-    print(f"User {user_id} left room {chat_url}")
-    
-@socketio.on("message")
-def handle_message(data):
+    room = data["room_id"]
+    await socket_manager.enter_room(sid, chat_url)
+    users[user_id] = sid
+    chat_log = await handler.get_chat_log(room)
+    formatted_chat_log = format_message_response(chat_log)
+    await socket_manager.emit("loadChats", formatted_chat_log, room=chat_url)
+    print(f"User {user_id} joined room {chat_url}")
+
+@socket_manager.on("leave")
+async def handle_leave(sid, data):
+    user_id = data["user_id"]
     chat_url = data["chat_url"]
-    message = data["message_content"]
-    sender = data["sender_id"]
-    receiver = data['receiver_id']
-    room = data['room_id']
+    await socket_manager.leave_room(sid, chat_url)
+    print(f"User {user_id} left room {chat_url}")
+
+@socket_manager.on("message")
+async def handle_message(sid, data: ChatMessageRequest):
+    chat_url = data.chat_url
     time_now = datetime.now().strftime("%H:%M")
     
-    handler.add_message(room_id=room, sender_id=sender, receiver_id=receiver, message_content=message)
-    
-    print(f"Message from {sender}: {message} in room {chat_url}")
-    send({"sender_id": sender, "message_contents": message, "time": time_now}, room=chat_url)
-    
-@socketio.on('messagesSeen')
-def view_message(data):
-    receiver_id = data['user_id']
-    handler.read_message(receiver_id)
-    
+    await handler.add_message(room_id=data.room_id, sender_id=data.sender_id, receiver_id=data.receiver_id, message_content=data.message_content)
 
-# General purpose funcions -----------------------------------------------------------------------------------------------------
-        
+    await socket_manager.emit(
+        "message",
+        {"sender_id": data.sender_id, "message_contents": data.message_content, "time": time_now},
+        room=chat_url
+    )
 
-def email_checker(email):
-    
-    detailed_result = is_email(email, diagnose=True)
-    return detailed_result
-    
-def password_checker(password):
-    if len(password) < 8:
-        return ("Make sure your password is at least 8 letters")
-    elif re.search('[0-9]',password) is None:
-        return ("Make sure your password has a number in it")
-    elif re.search('[A-Z]',password) is None: 
-        return ("Make sure your password has a capital letter in it")
-    else:
-        return 'valid'
-    
+@socket_manager.on("messagesSeen")
+async def view_message(sid, data: ViewMessageRequest):
+    await handler.read_message(data.user_id)
+
+# -------------------- UTILITIES --------------------
+
 def convert_string_tuples(lst):
-    
-    new_lst = []
-    
-    for item in lst:
-        removed_tuple_layer = item[0]
-        
-        for char in "()":
-            removed_tuple_layer = removed_tuple_layer.replace(char, "")
-            
-        new_lst.append(tuple(removed_tuple_layer.split(',')))
-        
-    return new_lst
+    return [tuple(item[0].replace("(", "").replace(")", "").split(",")) for item in lst]
 
 def format_message_response(message_tuple_array):
-    dict_arr = []
-    for message_tuple in message_tuple_array:
-        dt_obj = message_tuple[5]
-        date = dt_obj.strftime("%Y-%m-%d")
-        time = dt_obj.strftime("%H:%M")
-        dict_msg = {
-            'message_id': message_tuple[0], 
-            'sender_id': message_tuple[1],
-            'receiver_id': message_tuple[2],
-            'message_contents': message_tuple[3],
-            'room_id': message_tuple[4],
-            'date': date,
-            'time': time,
-            'receiver_has_read': message_tuple[-1]
+    return [
+        {
+            "message_id": msg[0],
+            "sender_id": msg[1],
+            "receiver_id": msg[2],
+            "message_contents": msg[3],
+            "room_id": msg[4],
+            "date": msg[5].strftime("%Y-%m-%d"),
+            "time": msg[5].strftime("%H:%M"),
+            "receiver_has_read": msg[-1],
         }
-        dict_arr.append(dict_msg)
-    return dict_arr
-            
+        for msg in message_tuple_array
+    ]
 
-# Ollama client functions ------------------------------------------------------------------------------------------------
-    
 def get_response(prompt_message, chat_history):
-    # send message
-    response = client.generate(model=model_type, prompt=f'chat_history: {chat_history} || next_message: {prompt_message}', keep_alive=True)
-    
+    response = client.generate(model=model_type, prompt=f"chat_history: {chat_history} || next_message: {prompt_message}", keep_alive=True)
     return response.response
 
-# -----------------------------------------------------------------------------------------------------------------------------
-
+# -------------------- RUN SERVER --------------------
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000)
