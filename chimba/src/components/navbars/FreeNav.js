@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import './freeNav.css'
 import { IoMdContact } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
 import { MdContactSupport } from "react-icons/md";

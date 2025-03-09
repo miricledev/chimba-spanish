@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './comprehension.css'
 import { PopUp } from './PopUp'
 
 

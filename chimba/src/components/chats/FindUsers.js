@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import UserCard from './UserCard'
-import './chats.css'
 
 const FindUsers = () => {
 

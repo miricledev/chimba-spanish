@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAuth } from '../authorisation/AuthProvider';
 import { Link } from 'react-router-dom';
-import './Dashboard.css';
 
 
 const Dashboard = () => {

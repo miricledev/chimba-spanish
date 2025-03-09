@@ -1,7 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react'
 import axios from 'axios'
 import Message from './Message'
-import './Messages.css'
 
 
 const AIChatInterface = () => {

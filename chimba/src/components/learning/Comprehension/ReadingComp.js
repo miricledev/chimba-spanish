@@ -1,7 +1,6 @@
 import React from 'react';
 import articleData from './data';
 import Word from './Word';
-import './comprehension.css';
 
 const ReadingComp = () => {
     const splitArticle = articleData.content.split(/(\s+)/);

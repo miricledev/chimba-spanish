@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./Flashcard.css";
 
 const Flashcard = ({ term, definition, flashcardShown }) => {
     const [side, setSide] = useState(true);

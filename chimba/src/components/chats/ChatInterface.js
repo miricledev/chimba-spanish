@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import './chats.css'
 import { io } from "socket.io-client"
 import { useAuth } from '../authorisation/AuthProvider'
 import Message from './Message'

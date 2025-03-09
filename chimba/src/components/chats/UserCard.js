@@ -1,5 +1,4 @@
 import React from 'react'
-import './chats.css'
 import { useAuth } from '../authorisation/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 

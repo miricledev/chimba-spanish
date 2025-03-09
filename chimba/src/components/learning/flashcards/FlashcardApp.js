@@ -5,7 +5,6 @@ import { useAuth } from "../../authorisation/AuthProvider";
 import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import { FaShuffle } from "react-icons/fa6";
 import { IconContext } from "react-icons";
-import "./Flashcard.css";
 
 const FlashcardApp = () => {
     const [flashcardSet, setFlashcardSet] = useState([]);

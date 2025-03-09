@@ -1,9 +1,6 @@
 import React from 'react'
-import './Messages.css'
 
 const Message = ({children, user}) => {
-
-
 
   return (
     <div className={user=='ai' ? 'message ai-message' : 'message user-message'}>
