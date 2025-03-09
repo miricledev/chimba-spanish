@@ -1,4 +1,5 @@
 import React from 'react'
+import '../App.css'
 
 const Home = () => {
 
@@ -6,7 +7,7 @@ const Home = () => {
         <div className='main-page'>
             <div className='row r1'>
                 <h2 className='intro outline-text'>¡Óyeme!</h2>
-                <img className='image' src='chimba_logo.png' />
+                <img className='w-50' src='chimba_logo.png' />
                 <h3 className='intro outline-text'>This Ain’t Your Average Spanish Class</h3>
             </div>
             <div className='row r2'>

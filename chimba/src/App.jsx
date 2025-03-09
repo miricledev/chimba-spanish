@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AuthorisedPagesProtector from './components/navbars/AuthorisedPagesProtector'
 import Dashboard from './components/authorised pages/Dashboard'
 import Home from './components/Home'
-import MapApp from './components/learning/directions/MapApp'
 import FlashcardApp from './components/learning/flashcards/FlashcardApp'
 import AIChatInterface from './components/learning/AI Chat/AIChatInterface'
 import ReadingComp from './components/learning/Comprehension/ReadingComp'
@@ -14,6 +13,7 @@ import FindUsers from './components/chats/FindUsers'
 import ChatInterface from './components/chats/ChatInterface'
 import Inbox from './components/chats/Inbox'
 import FreeNav from './components/navbars/FreeNav'
+import './App.css'
 
 const App = () => {
 
@@ -28,7 +28,6 @@ const App = () => {
                 <Route path='1/' element={<AuthorisedPagesProtector />}>
                   <Route index element={<Dashboard />} />
                   <Route path='flashcards' element={<FlashcardApp />} />
-                  <Route path='map' element={<MapApp />} />
                   <Route path='aichat' element={<AIChatInterface />} />
                   <Route path='readingcomp' element={<ReadingComp />} />
                   <Route path='findusers' element={<FindUsers />} />

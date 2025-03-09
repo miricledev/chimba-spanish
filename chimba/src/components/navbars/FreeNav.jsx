@@ -6,13 +6,14 @@ import { MdContactSupport } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { IoAddCircle } from "react-icons/io5";
 import { IconContext } from 'react-icons';
+import '../../App.css'
 
 const FreeNav = () => {
   return (
     <>
-        <nav className='main-container'>
+        <nav className='bg-red-500'>
             <IconContext.Provider value={{style: {fontSize: '30px;'}}}>
-                <div className='side'>
+                <div className='flex flex-row'>
                     <Link className='link' to='/' ><FaHome /></Link>
                     <Link className='link'>About Us</Link>
                     <Link className='link'>Contact Us <IoMdContact /></Link>
