@@ -7,7 +7,9 @@ import Message from './Message'
 
 const url = "http://localhost:5000"
 
-const socket = io(url)
+const socket = io(url, {
+    transports: ["websocket"]
+})
 
 const ChatInterface = () => {
 

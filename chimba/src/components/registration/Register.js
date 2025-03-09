@@ -44,7 +44,6 @@ const Register = () => {
         <h2>Register details</h2>
         <form className='form-box'>
             <div className='side-register'>
-
                 
                 <label>Email Address</label>
                 <input 

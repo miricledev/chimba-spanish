@@ -140,8 +140,10 @@ async def login(request: LoginRequest):
 
 @app.post("/get/terms")
 async def get_flashcards(request: ViewMessageRequest):
+    print("Received Request:", request.dict())
     try:
         flashcards = await handler.get_all_flashcards(request.user_id)
+        print(flashcards, flush=True)
         return {key: value for key, value in convert_string_tuples(flashcards)}
     except Exception as e:
         return {"reply": str(e)}
