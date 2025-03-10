@@ -37,9 +37,9 @@ const App = () => {
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='/' element={<FreeNav />}>
                   <Route index element={<Home />} />
-                  <Route path='login' element={<Login />} />
-                  <Route path='register' element={<Register />} />
                 </Route>
+                <Route path='login' element={<Login />} />
+                <Route path='register' element={<Register />} />
               </Route>
             </Routes>
           </AuthProvider>

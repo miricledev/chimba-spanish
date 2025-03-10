@@ -1,6 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const CountryBio = ({country, subtitle, description, motive, buttonText, images, margin, infoSide, bgPhoto, bgText}) => {
+
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        return navigate('register')
+    }
     return (
         <div className='w-full z-60 h-screen bg-(--bg2) relative scroll-snap-start flex justify-center items-center'>
             <div className='flex flex-row justify-center w-screen items-center' style={infoSide=="left" ? {flexDirection: "row-reverse"} : {}}>
@@ -13,13 +20,13 @@ const CountryBio = ({country, subtitle, description, motive, buttonText, images,
 
                     <h2 className='font-euphoria text-9xl'>{country}</h2>
 
-                    <h3 className='font-inter font-bold italic text-3xl text-center'>{subtitle}</h3>
+                    <h3 className='font-inter font-bold italic text-4xl text-center'>{subtitle}</h3>
 
-                    <p className='font-light font-inter italic text-center text-xl'>{description}</p>
+                    <p className='font-light font-inter italic text-center text-2xl'>{description}</p>
 
-                    <h3 className='font-medium font-inter italic text-2xl text-center'>{motive}</h3>
+                    <h3 className='font-medium font-inter italic text-3xl text-center'>{motive}</h3>
 
-                    <button className='btn btn-hover text-black font-inter italic text-xl p-5'>{buttonText}</button>
+                    <button onClick={handleClick} className='btn btn-hover text-black font-inter italic text-2xl p-5'>{buttonText}</button>
 
                 </div>
             </div>

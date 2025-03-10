@@ -6,7 +6,7 @@ import Page3 from './Page3'
 import Page4 from './Page4'
 import Page5 from './Page5'
 import CountryBio from './CountryBio';
-import { countryInfo } from './country';
+import { countryInfo } from './storage/country';
 
 const Home = () => {
 

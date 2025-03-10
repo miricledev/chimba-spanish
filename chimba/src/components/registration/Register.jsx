@@ -2,6 +2,8 @@ import React from 'react'
 import { useRef, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Input from './Input'
+import google from '/src/assets/register/google.png'
 
 const Register = () => {
 
@@ -10,17 +12,65 @@ const Register = () => {
     const firstName = useRef()
     const lastName = useRef()
     const password = useRef()
-    const passwordConfirmed = useRef()
     const phone = useRef()
+    const checked = useRef()
+    const checkedText = useRef()
 
     const [submissionResponse, setSubmissionResponse] = useState('')
-    
+
+    const [phase, setPhase] = useState(0)
+
+    const headerText = [
+        'Create an account',
+        'Details',
+        'Enter a password'
+    ]
+
+    const buttonText = [
+        'Next',
+        'Next',
+        'Register'
+    ]
 
     const submitForm = (e) => {
         e.preventDefault();
         console.log(password.current.value)
-        console.log(passwordConfirmed.current.value)
-        if(passwordConfirmed.current.value===password.current.value){
+
+        if(phase < 2){
+            if (checked.current.checked) {
+                let allFilled = true; // Track if all inputs for this phase are filled
+            
+                if (phase === 0) {
+                    if (!email.current.value) {
+                        email.current.style.borderColor = "red";
+                        allFilled = false;
+                    }
+                } 
+                else if (phase === 1) {
+                    [firstName, lastName, phone].forEach(input => {
+                        if (!input.current.value) {
+                            input.current.style.borderColor = "red";
+                            allFilled = false;
+                        } else{
+                            input.current.style.borderColor = "light-grey"
+                        }
+                    });
+                } 
+                else if (phase === 2) {
+                    if (!password.current.value) {
+                        password.current.style.borderColor = "red";
+                        allFilled = false;
+                    }
+                }
+            
+                if (allFilled) {
+                    setPhase(prevPhase => prevPhase + 1); // Only move to the next phase if all inputs are filled
+                }
+            } else {
+                checkedText.current.style.color = "red";
+            }
+            
+        } else{
             // send data to backend
             axios.post("/api/register", {
                 email: email.current.value,
@@ -33,64 +83,39 @@ const Register = () => {
             ).catch(
                 error => console.log(error)
             )
-        } else{
-            console.log("Passwords do not match")
         }
+        
     }
 
   return (
-    <div className='form-container'>
-        <h2>Register details</h2>
-        <form className='form-box'>
-            <div className='side-register'>
+    <div className='flex flex-col gap-4 justify-center items-center h-screen w-full'>
+        <div className='flex flex-col gap-6'>
+            <h2 className='font-bold text-4xl font-carlito'>{headerText[phase]}</h2>
+            <form className='flex flex-col gap-3 justify-center'>
 
-                
-                <label>Email Address</label>
-                <input 
-                    type='text'
-                    required
-                    ref={email}
-                />
-                <label>First Name</label>
-                <input 
-                    type='text'
-                    required
-                    ref={firstName}
-                />
-                <label>Last Name</label>
-                <input 
-                    type='text'
-                    required
-                    ref={lastName}
-                />
-            </div>
-            <div className='side-register'>
+                <Input style={phase == 0 ? {display: 'flex'} : {display: 'none'}} ref={email}>Email</Input>
+                <Input style={phase == 1 ? {display: 'flex'} : {display: 'none'}} ref={firstName}>First name</Input>
+                <Input style={phase == 1 ? {display: 'flex'} : {display: 'none'}} ref={lastName}>Last name</Input>
+                <Input style={phase == 2 ? {display: 'flex'} : {display: 'none'}} ref={password}>Password</Input>
+                <Input style={phase == 1 ? {display: 'flex'} : {display: 'none'}} ref={phone}>Mobile number</Input>
 
-                <label>Password</label>
-                <input 
-                    type='text'
-                    required
-                    ref={password}
-                />
-                <label>Confirm Password</label>
-                <input 
-                    type='text'
-                    required
-                    ref={passwordConfirmed}
-                />
-                <label>Phone Number</label>
-                <input 
-                    type='tel'
-                    required
-                    ref={phone}
-                />
-                
                 {submissionResponse && (<p>{submissionResponse}</p>)}
-                
+            </form>
+
+            <div className='flex flex-row items-center gap-3' style={phase == 0 ? {display: 'flex'} : {display: 'none'}}>
+                <input type='checkbox' ref={checked} />
+                <p ref={checkedText} className='text-gray-400 text-sm'>You accept the privacy policy and terms of use</p>
             </div>
-        </form>
-        <button onClick={(event) => submitForm(event)}>Register</button>
-        <p>Already have an account? <Link to='/login'>Log in</Link></p>
+
+            <button className='btn btn-hover text-stroke-3 text-xl p-3 font-carlito rounded-xl w-100' onClick={(event) => submitForm(event)}>{buttonText[phase]}</button>
+            
+            <hr />
+
+            <button className='btn-hover flex flex-row items-center justify-center p-3 w-100 border border-gray-300 rounded-xl'><img src={google} className='w-8 h-8' />Sign in with Google</button>
+
+            <p className='font-carlito text-sm self-center'>Already have an account? <Link className='text-(--primary) underline' to='/login'>Log in</Link></p>
+        </div>
+ 
     </div>
   )
 }

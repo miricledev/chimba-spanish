@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { IoMdContact } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
 import { MdContactSupport } from "react-icons/md";
@@ -8,6 +8,31 @@ import { IoAddCircle } from "react-icons/io5";
 import { IconContext } from 'react-icons';
 
 const FreeNav = () => {
+
+  const navigate = useNavigate()
+
+  const [c, setC] = useState(false)
+
+  useEffect(() => {
+    const changeColor = () => {
+      
+      if ((window.scrollY >= 2 * window.innerHeight) && (window.scrollY < 3 * window.innerHeight)){
+        setC(true)
+      } else{
+        setC(false)
+      }
+    }
+
+      window.addEventListener("scroll", changeColor)
+
+      return () => window.removeEventListener("scroll", changeColor)
+    
+  }, [])
+
+  const redir = () => {
+    return navigate('register')
+  }
+
   return (
     <div>
         <nav className='flex flex-row justify-between items-center h-100px fixed w-full z-50'>
@@ -15,9 +40,9 @@ const FreeNav = () => {
                 Chimba
             </h2>
             <div className='flex flex-row justify-between p-10'>
-                <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover mix-blend-difference'>About</button>
-                <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover'>Contact</button>
-                <button className='bg-(--primary) p-5 rounded-2xl sm:text-xl 2xl:text-3xl btn-hover'>Get started</button>
+                <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover mix-blend-difference' style={c ? {color: 'white'} : {color: 'black'}}>About</button>
+                <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover' style={c ? {color: 'white'} : {color: 'black'}}>Contact</button>
+                <button className='bg-(--primary) p-5 rounded-2xl sm:text-xl 2xl:text-3xl btn-hover' onClick={redir}>Get started</button>
             </div>
         </nav>
         <Outlet />
