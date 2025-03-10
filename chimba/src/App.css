@@ -28,6 +28,20 @@
     .btn{
         @apply font-baloo2 text-white font-bold bg-(--primary) rounded-full text-5xl;
     }
+    @keyframes swoop-up {
+        from {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 0.2;
+        }
+    }
+
+    .animate-swoop-up{
+        animation: swoop-up 0.3s ease-out forwards;
+    }
 }
 
 .text-stroke-3 {

@@ -37,7 +37,7 @@ const Home = () => {
     useEffect(() => {
         const handleScroll = () => {
           
-            if(window.scrollY > window.innerHeight / 2){
+            if(window.scrollY > 0){
                 setScrollArrow(true)
             } else{
                 setScrollArrow(false)
@@ -59,7 +59,7 @@ const Home = () => {
             <Page5 />
             {mappedInfo}
 
-            {scrollArrow && <FaCircleArrowUp className='animate-fade-in fixed bottom-4 left-1/2 -translate-x-1/2 text-6xl opacity-20 hover:opacity-65 btn-hover' 
+            {scrollArrow && <FaCircleArrowUp className='z-70 animate-swoop-up fixed bottom-4 left-1/2 -translate-x-1/2 text-6xl opacity-20 hover:opacity-65 btn-hover' 
             onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} />}
         </div>
         

@@ -31,7 +31,7 @@ const Page5 = () => {
                         </p>
                         <button 
                             className='flex flex-row gap-3 btn btn-hover p-5 italic self-center text-black rounded-3xl font-medium font-inter text-4xl'
-                            onClick={() => window.scrollTo({top: window.scrollY + window.innerHeight, behavior: 'smooth'})}
+                            onClick={() => window.scrollTo({top: window.innerHeight * 5, behavior: 'smooth'})}
                         >
                             Not sure where to travel? <FaArrowDown />
                         </button>

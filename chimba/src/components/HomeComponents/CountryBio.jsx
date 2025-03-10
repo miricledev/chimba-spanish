@@ -2,14 +2,14 @@ import React from 'react'
 
 const CountryBio = ({country, subtitle, description, motive, buttonText, images, margin, infoSide, bgPhoto, bgText}) => {
     return (
-        <div className='w-full h-screen bg-(--bg2) relative scroll-snap-start'>
-            <div className='flex flex-row'>
-                <div className='grid'>
+        <div className='w-full z-60 h-screen bg-(--bg2) relative scroll-snap-start flex justify-center items-center'>
+            <div className='flex flex-row justify-center w-screen items-center' style={infoSide=="left" ? {flexDirection: "row-reverse"} : {}}>
+                <div className='grid grid-cols-2 h-screen w-full' style={{backgroundColor: bgPhoto}}>
 
                     {images}
 
                 </div>
-                <div className='flex flex-col justify-center gap-5 items-center'>
+                <div className='h-screen flex flex-col justify-center gap-5 w-full items-center' style={{backgroundColor: bgText, width: `${margin}%`}}>
 
                     <h2 className='font-euphoria text-9xl'>{country}</h2>
 
