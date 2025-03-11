@@ -7,6 +7,7 @@ import Page4 from './Page4'
 import Page5 from './Page5'
 import CountryBio from './CountryBio';
 import { countryInfo } from './storage/country';
+import FreeNav from '../navbars/FreeNav';
 
 const Home = () => {
 
@@ -51,6 +52,8 @@ const Home = () => {
 
     return(
         <div className='flex flex-col justify-start overflow-y-scroll scroll-snap-y scroll-snap-mandatory'>
+
+            <FreeNav />
 
             <Page1 />
             <Page2 />

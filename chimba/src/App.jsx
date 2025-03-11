@@ -14,6 +14,7 @@ import ChatInterface from './components/chats/ChatInterface'
 import Inbox from './components/chats/Inbox'
 import FreeNav from './components/navbars/FreeNav'
 import './App.css'
+import Sidebar from './components/navbars/Sidebar'
 
 const App = () => {
 
@@ -35,11 +36,12 @@ const App = () => {
                   <Route path='inbox' element={<Inbox />} />
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
-                <Route path='/' element={<FreeNav />}>
-                  <Route index element={<Home />} />
+                <Route path='/' element={<Sidebar />}>
+                  
+                  <Route path='login' element={<Login />} />
+                  <Route path='register' element={<Register />} />
                 </Route>
-                <Route path='login' element={<Login />} />
-                <Route path='register' element={<Register />} />
+                <Route index element={<Home />} />
               </Route>
             </Routes>
           </AuthProvider>

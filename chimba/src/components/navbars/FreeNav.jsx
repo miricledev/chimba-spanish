@@ -34,19 +34,17 @@ const FreeNav = () => {
   }
 
   return (
-    <div>
-        <nav className='flex flex-row justify-between items-center h-100px fixed w-full z-50'>
-            <h2 className='ml-10 font-baloo2 sm:text-5xl 2xl:text-7xl p-7 text-(--primary) font-bold drop-shadow-sm btn-hover' onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-                Chimba
-            </h2>
-            <div className='flex flex-row justify-between p-10'>
-                <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover mix-blend-difference' style={c ? {color: 'white'} : {color: 'black'}}>About</button>
-                <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover' style={c ? {color: 'white'} : {color: 'black'}}>Contact</button>
-                <button className='bg-(--primary) p-5 rounded-2xl sm:text-xl 2xl:text-3xl btn-hover' onClick={redir}>Get started</button>
-            </div>
-        </nav>
-        <Outlet />
-    </div>
+  
+    <nav className='flex flex-row justify-between items-center h-100px fixed w-full z-50'>
+        <h2 className='ml-10 font-baloo2 sm:text-5xl 2xl:text-7xl p-7 text-(--primary) font-bold drop-shadow-sm btn-hover' onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+            Chimba
+        </h2>
+        <div className='flex flex-row justify-between p-10'>
+            <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover mix-blend-difference' style={c ? {color: 'white'} : {color: 'black'}}>About</button>
+            <button className='p-5 sm:text-xl 2xl:text-3xl btn-hover' style={c ? {color: 'white'} : {color: 'black'}}>Contact</button>
+            <button className='bg-(--primary) p-5 rounded-2xl sm:text-xl 2xl:text-3xl btn-hover' onClick={redir}>Get started</button>
+        </div>
+    </nav>
   )
 }
 
