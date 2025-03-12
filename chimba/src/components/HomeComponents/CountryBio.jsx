@@ -11,7 +11,7 @@ const CountryBio = ({country, subtitle, description, motive, buttonText, images,
     return (
         <div className='w-full z-60 h-screen bg-(--bg2) relative scroll-snap-start flex justify-center items-center'>
             <div className='flex flex-row justify-center w-screen items-center' style={infoSide=="left" ? {flexDirection: "row-reverse"} : {}}>
-                <div className='grid grid-cols-2 h-screen w-full' style={{backgroundColor: bgPhoto}}>
+                <div className='grid grid-cols-2 h-screen w-full content-center' style={{backgroundColor: bgPhoto}}>
 
                     {images}
 

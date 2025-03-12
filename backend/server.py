@@ -19,7 +19,7 @@ app = Flask(__name__)
 CORS(app)
 
 # SocketIO integration
-socketio = SocketIO(app,  cors_allowed_origins="*", async_mode="eventlet")
+socketio = SocketIO(app,  cors_allowed_origins="*")
 
 # DeepL key
 load_dotenv()
@@ -117,7 +117,7 @@ def login():
         
     return jsonify(response)
 
-@app.route("/get/terms", methods=['POST'])
+@app.route("/api/get/terms", methods=['POST'])
 def get_flashcards():
     form_data = request.json
     user_id = form_data['id']
@@ -132,7 +132,7 @@ def get_flashcards():
         return jsonify(response)
     
     
-@app.route('/set/terms', methods=['POST'])
+@app.route('/api/set/terms', methods=['POST'])
 def insert_flashcards():
     form_data = request.json
     term = form_data['term']
@@ -171,7 +171,7 @@ def reset_ai():
     
     return jsonify({'reply': ''})
 
-@app.route("/translate", methods=["POST"])
+@app.route("/api/translate", methods=["POST"])
 def translate():
     try:
         data = request.json
@@ -199,7 +199,7 @@ def translate():
         print(f"Error: {e}")
         return jsonify({"error": "Translation failed"}), 500
     
-@app.route('/users/getall', methods=['GET'])
+@app.route('/api/users/getall', methods=['GET'])
 def get_all_users():
     print("get all users", flush=True)
     try:
@@ -221,7 +221,7 @@ def get_all_users():
     
     
 # GET all chats for user x, SET all chats to read
-@app.route('/chats/get', methods=['POST'])
+@app.route('/api/chats/get', methods=['POST'])
 def load_all_chats():
     data = request.json
     room_id = data['room_id']

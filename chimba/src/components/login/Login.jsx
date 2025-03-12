@@ -3,6 +3,8 @@ import { useRef, useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../authorisation/AuthProvider'
+import Input from '../registration/Input.jsx'
+import google from '/src/assets/register/google.png'
 
 const Login = () => {
 
@@ -14,7 +16,15 @@ const Login = () => {
     // If user is already logged in, redirect from this page to dashboard
     if(user){
       return navigate('/1/')
-  }
+    }
+
+    window.addEventListener("keydown", (event) => {
+      if(event.code === "Enter"){
+        handleLogin(event)
+      }
+    })
+
+    return () => window.removeEventListener("keydown", event)
   }, [])
 
   // The message after failed log in
@@ -55,25 +65,25 @@ const Login = () => {
     )
   }
 
-  return (
-    <div className='bg-image'>
-      <div className='login-form'>
-        {/* Background floating purple rays */}
-        <img className='logo' src='chimba_logo.png' alt='noimg' />
-              {/* Login Form */}
-        <div className="container">
-          <form className='login--form'>
-            <h2>Login:</h2>
-            <input type='text' placeholder='email' ref={email} />
-            <input type='password' placeholder='password' ref={password} />
-            <button onClick={(event) => handleLogin(event)}>Log in</button>
+  return (  
+        <div className="flex flex-col items-center justify-center w-full h-screen">
+          <form className='flex flex-col gap-5'>
+            <h2 className='font-bold text-4xl font-carlito'>Welcome back</h2>
+
+            <Input ref={email}>Email</Input>
+            <Input ref={password}>Password</Input>
+
+            <button className='btn btn-hover text-stroke-3 text-xl p-3 font-carlito rounded-xl w-100' onClick={(event) => handleLogin(event)}>Log in</button>
+
             {loginResponse && (<p style={errorStyle}>{loginResponse}</p>)}
-            <p>No account registered? <Link to='/register'>Register here</Link></p>
+
+            <hr />
+
+            <button className='btn-hover flex flex-row items-center justify-center p-3 w-100 border border-gray-300 rounded-xl'><img src={google} className='w-8 h-8' />Sign in with Google</button>
+
+            <p className='font-carlito text-sm self-center'>New to our platform? <Link className='text-(--primary) underline' to='/register'>Create an account</Link></p>
           </form>
         </div>
-      </div>
-    </div>
-
   );
   
 }

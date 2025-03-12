@@ -2,7 +2,7 @@ import React from 'react'
 import { useAuth } from '../authorisation/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 
-const UserCard = ({user_id, firstName, lastName, image}) => {
+const UserCard = ({k, user_id, firstName, lastName, image}) => {
 
     const { user } = useAuth()
 
@@ -18,11 +18,11 @@ const UserCard = ({user_id, firstName, lastName, image}) => {
     }
 
     return (
-        <div className="user-card">
+        <div key={k} className="user-card">
           {/* User Image (fallback if no image is provided) */}
           <div className="user-image-container">
             <img
-              src={image || "https://via.placeholder.com/100"} // Default image
+              src={image} // Default image
               alt={`${firstName} ${lastName}`}
               className="user-image"
             />

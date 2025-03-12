@@ -7,11 +7,11 @@ const FindUsers = () => {
     const [allUsers, setAllUsers] = useState([])
 
     useEffect(() => {
-        axios.get('/users/getall').then(
+        axios.get('/api/users/getall').then(
             res => {
                 const users = Object.values(res.data)
 
-                setAllUsers(users.map(user => <UserCard user_id={user[0]} firstName={user[1]} lastName={user[2][0].toUpperCase()} />))
+                setAllUsers(users.map((user, i) => <UserCard k={i} user_id={user[0]} firstName={user[1]} lastName={user[2][0].toUpperCase()} />))
             }
         )
     }, [])

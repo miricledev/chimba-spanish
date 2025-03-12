@@ -13,7 +13,7 @@ const FlashcardApp = () => {
     const { user } = useAuth();
 
     useEffect(() => {
-        axios.post('/get/terms', { id: user.id })
+        axios.post('/api/get/terms', { id: user.id })
             .then(res => {
                 setFlashcardSet(Object.entries(res.data).map(([term, definition]) => (
                     <Flashcard term={term} definition={definition} flashcardShown={flashcardShown} />

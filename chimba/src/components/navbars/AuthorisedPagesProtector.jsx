@@ -3,6 +3,13 @@ import { useAuth } from '../authorisation/AuthProvider';
 import { Outlet, Link } from 'react-router-dom';
 import { IoMail, IoMailUnreadSharp } from "react-icons/io5";
 import { IconContext } from 'react-icons';
+import { PiCoffeeDuotone } from "react-icons/pi";
+import { GiBrain } from "react-icons/gi";
+import { FaRobot } from "react-icons/fa";
+import { TiMessages } from "react-icons/ti";
+import { MdOutlinePersonSearch } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
+import Sideicon from './Sideicon';
 
 const AuthorisedPagesProtector = () => {
     const { user, logout, redirectIfNotLoggedIn } = useAuth();
@@ -16,26 +23,31 @@ const AuthorisedPagesProtector = () => {
     }, [user]);
 
     return user ? (
-      <div className='page'>
-          <div className="navbar-container">
-                <nav className="navbar">
-                
-                    <div className="navbar-links">
-                    
-                        <Link to='/1/' className="navbar-link"> <img src='/chimba_logo.png' alt='loading' style={{width: '5rem', height: '5rem'}} /></Link>
-                    </div>
-                    <button onClick={logout} className="navbar-button">Log Out</button>
-                    <Link to="inbox" className="">
-                            <IconContext.Provider value={{size: '2rem'}}>
-                                <IoMail />
-                            </IconContext.Provider>
-                    </Link>
-                    
-                </nav>
-            </div>
-            <div className='content'>
-                <Outlet />
-            </div>
+        <div className="flex flex-row">
+        {/* Sidebar */}
+        <div className="flex justify-start items-center gap-5 p-15 h-screen flex-col flex-start w-[25%] bg-(--primary)">
+          {/* Title */}
+          <h2 className="font-baloo2 sm:text-5xl 2xl:text-7xl p-7 text-white font-bold drop-shadow-sm btn-hover">
+            Chimba
+          </h2>
+
+          <h3>Hello, {user.firstName}</h3>
+
+            <Sideicon Icon={PiCoffeeDuotone } link={'/1/'}>Feed</Sideicon>
+            <Sideicon Icon={GiBrain } link={'/1/learn'}>Learn</Sideicon>
+            <Sideicon Icon={FaRobot } link={'/1/ai'}>AI Chat</Sideicon>
+            <Sideicon Icon={TiMessages } link={'/1/findusers'}>Social</Sideicon>
+            <Sideicon Icon={MdOutlinePersonSearch } link={'/1/findtutors'}>Find Tutor</Sideicon>
+            <Sideicon Icon={CgProfile } link={'/1/profile'}>Profile</Sideicon>
+  
+          {/* Logout Button */}
+          <button onClick={logout} className="navbar-button mt-5 text-white text-lg font-bold px-4 py-2 bg-red-600 rounded-md hover:bg-red-700 transition">
+            Log Out
+          </button>
+        </div>
+  
+        {/* Page Content */}
+        <Outlet />
       </div>
 
     ) : (

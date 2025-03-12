@@ -1,11 +1,16 @@
 import React from 'react'
 import { useRef, useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from './Input'
 import google from '/src/assets/register/google.png'
+import { useAuth } from '../authorisation/AuthProvider'
 
 const Register = () => {
+
+    const { login } = useAuth()
+
+    const nav = useNavigate()
 
     // Form references
     const email = useRef()
@@ -79,7 +84,11 @@ const Register = () => {
                 password: password.current.value,
                 phone: phone.current.value
             }).then(
-                res => setSubmissionResponse(res.data.reply)
+                res => {
+                    setSubmissionResponse(res.data.reply)
+                    login({email: email.current.value, password: password.current.value})
+                    nav('/1/')
+                }
             ).catch(
                 error => console.log(error)
             )

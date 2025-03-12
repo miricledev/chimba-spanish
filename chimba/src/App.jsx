@@ -37,7 +37,6 @@ const App = () => {
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='/' element={<Sidebar />}>
-                  
                   <Route path='login' element={<Login />} />
                   <Route path='register' element={<Register />} />
                 </Route>
