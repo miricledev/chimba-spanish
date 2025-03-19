@@ -9,10 +9,11 @@ const url = "http://localhost:5000"
 
 const socket = io(url)
 
-const ChatInterface = () => {
+const ChatInterface = ({setInbox}) => {
 
     const { user } = useAuth()
     const bothIDs = useParams()
+    console.log(`URL~: ${bothIDs}`)
     const user1 = bothIDs.id1
     const user2 = bothIDs.id2
     const chatUrl = window.location.href
@@ -41,6 +42,9 @@ const ChatInterface = () => {
 
         socket.on("message", (data) => {
             setMessages(prevMessages => [...prevMessages, data])
+            if(data.added_status === true){
+                setInbox(prevInbox => [...prevInbox])
+            }
         })
 
         socket.on('loadChats', (data) => {
@@ -80,8 +84,8 @@ const ChatInterface = () => {
     
 
 
-    return (
-        <div className='ml-35 w-250 flex flex-col items-center justify-center border border-gray-600 rounded-xl'>
+    return user1 && user2 ? (
+        <div className=' w-250 flex flex-col items-center justify-center border-3 border-gray-600 rounded-xl'>
             <div className='p-5 bg-gray-200 w-full rounded-xl'>
                 <h2 className='text-2xl font-medium font-carlito'>Speaking with: {receiverID}</h2>
             </div>
@@ -98,7 +102,7 @@ const ChatInterface = () => {
             <div className='message-input p-6 w-full flex flex-row justify-center align-center bg-gray-200 rounded-xl gap-5'>
 
                 <textarea 
-                class="w-full p-3 border rounded-lg resize-none bg-white" 
+                className="w-full p-3 border rounded-lg resize-none bg-white" 
                 rows="4" 
                 placeholder="Type your message..." 
                 onKeyDown={handleKeyDown}
@@ -109,7 +113,7 @@ const ChatInterface = () => {
 
             </div>
         </div>
-    )
+    ) : <h2 className='text-6xl font-carlito'>Please click on a chat</h2>
 }
 
 export default ChatInterface

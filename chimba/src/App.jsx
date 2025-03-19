@@ -35,8 +35,11 @@ const App = () => {
                   
                   <Route path='social' element={<SocialBar />}>
                     <Route index element={<FindUsers />} />
-                    <Route path='chats/:id1/:id2' element={<ChatInterface />} />
-                    <Route path='inbox' element={<Inbox />} />
+                    
+                    <Route path='inbox' >
+                      <Route index element={<Inbox />} />
+                      <Route path='chats/:id1/:id2' element={<Inbox />} />
+                    </Route>
                   </Route>
                   
                 </Route>

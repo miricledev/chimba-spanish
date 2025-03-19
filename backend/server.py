@@ -231,6 +231,26 @@ def load_all_chats():
             ...
     except Exception as e:
         ...
+        
+@app.route('/api/get-inbox', methods=['POST'])
+def get_all_inbox():
+    data = request.json
+    user_id = data['id']
+    try:
+        inbox = handler.get_all_inboxes(user_id)
+        
+        
+        print(inbox, flush=True)
+        # Takes the list of tuples and returns a dict with an index and the tuple converted to list for jsonify
+        inbox = {index: list(attributes) for index, attributes in enumerate(inbox)}
+        
+        return jsonify(inbox)
+        
+        
+    except Exception as e:
+        print(e, flush=True)
+        
+        return jsonify({"error": str(e)})
     
     
 # Socket IO functions ------------------------------------------------------------------------------------------------------------
@@ -273,10 +293,11 @@ def handle_message(data):
     room = data['room_id']
     time_now = datetime.now().strftime("%H:%M")
     
-    handler.add_message(room_id=room, sender_id=sender, receiver_id=receiver, message_content=message)
+    added_status = handler.add_message(room_id=room, sender_id=sender, receiver_id=receiver, message_content=message)
+    print(f'\n\n Added status: {added_status} \n\n')
     
     print(f"Message from {sender}: {message} in room {chat_url}")
-    send({"sender_id": sender, "message_contents": message, "time": time_now}, room=chat_url)
+    send({"sender_id": sender, "message_contents": message, "time": time_now, "added_status": added_status}, room=chat_url)
     
 @socketio.on('messagesSeen')
 def view_message(data):

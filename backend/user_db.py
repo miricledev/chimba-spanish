@@ -167,11 +167,55 @@ class DBHandler:
             
     def add_message(self, sender_id, room_id, receiver_id, message_content):
         if self.verify_connection():
+            
             query = "INSERT INTO messages (sender_id, receiver_id, room_number, message_contents) VALUES (%s, %s, %s, %s);"
             values = (sender_id, receiver_id, room_id, message_content)
             try:
                 self.cursor.execute(query, values)
                 self.connection.commit()
+                inserted = self.insert_into_inbox(room_id, sender_id, receiver_id, message_content)
+                return inserted
+            except Exception as e:
+                raise Exception(e)
+                
+    def insert_into_inbox(self, room_id, user1_id, user2_id, last_message):
+        if self.verify_connection():
+            if not self.check_inbox_exists(room_id):
+                query = "INSERT INTO inbox (room_id, user_id, receiver_id, last_message) VALUES (%s, %s, %s, %s);"
+                values = (room_id, user1_id, user2_id, last_message)
+                try:
+                    self.cursor.execute(query, values)
+                    self.connection.commit()
+                    return True
+                except Exception as e:
+                    raise Exception(e)
+            else:
+                return False
+                
+            
+    def get_all_inboxes(self, user_id):
+        if self.verify_connection():
+            query = "SELECT * FROM inbox WHERE user_id = %s;"
+            value = (user_id,)
+            try:
+                self.cursor.execute(query, value)
+                all_inboxes = self.cursor.fetchall()
+                print(all_inboxes, flush=True)
+                return all_inboxes
+            except Exception as e:
+                raise Exception(e)
+        
+    def check_inbox_exists(self, room_id):
+        if self.verify_connection():
+            query = "SELECT 1 FROM inbox WHERE room_id = %s;"
+            room = (room_id,)
+            try:
+                self.cursor.execute(query, room)
+                exists = self.cursor.fetchone()
+                if exists:
+                    return True
+                else:
+                    return False
             except Exception as e:
                 raise Exception(e)
             

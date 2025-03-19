@@ -15,7 +15,7 @@ const UserCard = ({k, user_id, firstName, lastName, image}) => {
 
         const sortedIDs = [loggedInUserID, selectedUserID].sort((a, b) => a-b).join("/")
 
-        return navigator(`chats/${sortedIDs}`)
+        return navigator(`inbox/chats/${sortedIDs}`)
     }
 
     return (
