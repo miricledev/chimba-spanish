@@ -10,9 +10,9 @@ const Page5 = () => {
             <div className='flex flex-col justify-center gap-5 items-center content-position'>
 
                 <div className='flex flex-row gap-8 justify-around items-center'>
-                    <img className='w-70 h-70' src={earth} />
-                    <img className='w-75 h-70' src={spain} />
-                    <h2 className='italic font-medium font-inter text-center text-8xl'>
+                    <img className='sm:w-50 sm:h-50 2xl:w-70 2xl:h-70' src={earth} />
+                    <img className='sm:w-50 sm:h-50 2xl:w-75 2xl:h-70' src={spain} />
+                    <h2 className='italic font-medium font-inter text-center sm:text-6xl 2xl:text-8xl'>
                         Travel Like a <span className='text-green-500'>Local</span>, <br /> Not a <span className='text-(--primary)'>Tourist</span>
                     </h2>
                 </div>
@@ -22,7 +22,7 @@ const Page5 = () => {
                     <img className='w-85 h-90' src={sa} />
 
                     <div className='flex flex-col gap-15 justify-center align-center'>
-                        <p className='text-center text-3xl font-medium'>
+                        <p className='text-center sm:text-2xl 2xl:text-3xl font-medium'>
                             Master real-world Spanish for effortless travel. Learn how to: <br /><br />
                             Ask for directions like a native <br />
                             Order food and negotiate prices <br />

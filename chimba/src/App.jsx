@@ -15,6 +15,7 @@ import Inbox from './components/chats/Inbox'
 import FreeNav from './components/navbars/FreeNav'
 import './App.css'
 import Sidebar from './components/navbars/Sidebar'
+import SocialBar from './components/navbars/SocialBar'
 
 const App = () => {
 
@@ -31,9 +32,13 @@ const App = () => {
                   <Route path='flashcards' element={<FlashcardApp />} />
                   <Route path='aichat' element={<AIChatInterface />} />
                   <Route path='readingcomp' element={<ReadingComp />} />
-                  <Route path='findusers' element={<FindUsers />} />
-                  <Route path='chats/:id1/:id2' element={<ChatInterface />} />
-                  <Route path='inbox' element={<Inbox />} />
+                  
+                  <Route path='social' element={<SocialBar />}>
+                    <Route index element={<FindUsers />} />
+                    <Route path='chats/:id1/:id2' element={<ChatInterface />} />
+                    <Route path='inbox' element={<Inbox />} />
+                  </Route>
+                  
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}
                 <Route path='/' element={<Sidebar />}>

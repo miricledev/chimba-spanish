@@ -7,10 +7,10 @@ const Page3 = () => {
             <div className='flex flex-row justify-center gap-20 items-center content-position'>
                 <img src={image} className='w-140 h-140' />
                 <div className='flex flex-col gap-20 justify-center align-center'>
-                    <h2 className='text-(--bg) 2xl:text-6xl text-center italic font-medium'>
+                    <h2 className='text-(--bg) text-6xl text-center italic font-medium'>
                         Chat 1-on-1 with <span className='text-green-500'>AI</span> <br /> <span className='text-(--primary)'>Specialized</span> in your dialect
                     </h2>
-                    <p className='text-(--bg) font-medium text-center 2xl:text-3xl'>
+                    <p className='text-(--bg) font-medium text-center sm:text-2xl 2xl:text-3xl'>
                         Need instant practice?
                         <br /><br />
                         Our AI understands and responds <br /> naturally in your chosen Spanish dialect. 

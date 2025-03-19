@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { io } from "socket.io-client"
 import { useAuth } from '../authorisation/AuthProvider'
 import Message from './Message'
+import { IoSend } from "react-icons/io5";
 
 const url = "http://localhost:5000"
 
@@ -69,28 +70,42 @@ const ChatInterface = () => {
         }
     }
 
+    const handleKeyDown = (e) => {
+        if(e.key === "Enter" && !e.shiftKey){
+            e.preventDefault();
+            sendMessage()
+        }
+    };
+
     
 
 
     return (
-        <div className='chat-int'>
-            ChatInterface
-            {user1}
-            {user2}
+        <div className='ml-35 w-250 flex flex-col items-center justify-center border border-gray-600 rounded-xl'>
+            <div className='p-5 bg-gray-200 w-full rounded-xl'>
+                <h2 className='text-2xl font-medium font-carlito'>Speaking with: {receiverID}</h2>
+            </div>
             
-            <div className='message-container'>
+            <div className='w-full h-130 overflow-y-scroll  flex flex-col gap-4 overflow-x-hidden p-10'>
                 {messages.reverse().map((msg, i) => {
                     return(
                         <Message key={i} sender={msg.sender_id} date={msg.date}  time={msg.time} >{msg.message_contents}</Message>
                     )
                 })}
-                <div ref={messagesEndRef} />
+            <div ref={messagesEndRef} />
             </div>
 
-            <div className='message-input'>
+            <div className='message-input p-6 w-full flex flex-row justify-center align-center bg-gray-200 rounded-xl gap-5'>
 
-                <input type='text' placeholder='Enter message here' ref={message} />
-                <button onClick={sendMessage}>Send</button>
+                <textarea 
+                class="w-full p-3 border rounded-lg resize-none bg-white" 
+                rows="4" 
+                placeholder="Type your message..." 
+                onKeyDown={handleKeyDown}
+                ref={message}>
+                </textarea>
+
+                <button onClick={sendMessage}><IoSend className='text-3xl btn-hover overflow-y-scroll' /></button>
 
             </div>
         </div>

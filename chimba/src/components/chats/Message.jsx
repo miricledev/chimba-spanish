@@ -1,21 +1,24 @@
-import React from 'react'
+import React from 'react';
 import { useAuth } from '../authorisation/AuthProvider';
 
-const Message = ({ children, sender, date, time, key }) => {
-    const { user } = useAuth()
-    const isUser = (sender === user.id); 
+const Message = ({ children, sender, date, time, id }) => {
+    const { user } = useAuth();
+    const isUser = sender === user.id;
+
+    const baseStyles = 'max-w-[300px] min-w-[100px] p-3 rounded-lg break-words';
+    const userStyles = 'bg-(--primary) text-black self-end';
+    const recipientStyles = 'bg-gray-300 text-black self-start';
+
+    
 
     return (
-        <div id={key} className={`message-wrapper ${isUser ? "message-user" : "message-other"}`}>
-            <div className="message-bubble">
-                <p className="message-text">{children}</p>
-                <div className="message-meta">
-                    <span className="message-time">{time}</span>
-                </div>
+        <div className={`flex p-1 ${isUser ? 'justify-end' : 'justify-start'} mb-2`}>
+            <div id={id} className={`${baseStyles} ${isUser ? userStyles : recipientStyles}`}>
+                <p>{children}</p>
+                <div className="text-xs text-gray-600 mt-1 text-right">{time}</div>
             </div>
         </div>
     );
-    };
+};
 
 export default Message;
-

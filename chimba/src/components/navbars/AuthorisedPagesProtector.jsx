@@ -24,30 +24,30 @@ const AuthorisedPagesProtector = () => {
 
     return user ? (
         <div className="flex flex-row">
-        {/* Sidebar */}
-        <div className="flex justify-start items-center gap-5 p-15 h-screen flex-col flex-start w-[25%] bg-(--primary)">
-          {/* Title */}
-          <h2 className="font-baloo2 sm:text-5xl 2xl:text-7xl p-7 text-white font-bold drop-shadow-sm btn-hover">
-            Chimba
-          </h2>
+            {/* Sidebar */}
+            <div className="fixed flex justify-start items-center sm:gap-2 2xl:gap-5 p-15 h-screen flex-col flex-start w-[100] bg-(--primary)">
+                {/* Title */}
+                <h2 className="font-baloo2 sm:text-5xl 2xl:text-7xl p-7 text-white font-bold drop-shadow-sm btn-hover">
+                    Chimba
+                </h2>
 
-          <h3>Hello, {user.firstName}</h3>
+                <h3>Hello, {user.firstName}</h3>
 
-            <Sideicon Icon={PiCoffeeDuotone } link={'/1/'}>Feed</Sideicon>
-            <Sideicon Icon={GiBrain } link={'/1/learn'}>Learn</Sideicon>
-            <Sideicon Icon={FaRobot } link={'/1/ai'}>AI Chat</Sideicon>
-            <Sideicon Icon={TiMessages } link={'/1/findusers'}>Social</Sideicon>
-            <Sideicon Icon={MdOutlinePersonSearch } link={'/1/findtutors'}>Find Tutor</Sideicon>
-            <Sideicon Icon={CgProfile } link={'/1/profile'}>Profile</Sideicon>
-  
-          {/* Logout Button */}
-          <button onClick={logout} className="navbar-button mt-5 text-white text-lg font-bold px-4 py-2 bg-red-600 rounded-md hover:bg-red-700 transition">
-            Log Out
-          </button>
-        </div>
-  
-        {/* Page Content */}
-        <Outlet />
+                    <Sideicon Icon={PiCoffeeDuotone } link={'/1/'}>Feed</Sideicon>
+                    <Sideicon Icon={GiBrain } link={'/1/learn'}>Learn</Sideicon>
+                    <Sideicon Icon={FaRobot } link={'/1/aichat'}>AI Chat</Sideicon>
+                    <Sideicon Icon={TiMessages } link={'/1/social'}>Social</Sideicon>
+                    <Sideicon Icon={MdOutlinePersonSearch } link={'/1/findtutors'}>Find Tutor</Sideicon>
+                    <Sideicon Icon={CgProfile } link={'/1/profile'}>Profile</Sideicon>
+        
+                {/* Logout Button */}
+                <button onClick={logout} className="navbar-button mt-5 text-white text-lg font-bold px-4 py-2 bg-red-600 rounded-md hover:bg-red-700 transition">
+                    Log Out
+                </button>
+            </div>
+    
+            {/* Page Content */}
+            <div className='ml-100 p-10'><Outlet /></div>
       </div>
 
     ) : (

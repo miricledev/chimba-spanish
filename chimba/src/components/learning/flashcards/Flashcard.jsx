@@ -25,7 +25,7 @@ const Flashcard = ({ term, definition, flashcardShown }) => {
               View {side ? "definition" : "term"} 
           </button>
       </div>
-  );
+  ); 
   
 };
 
