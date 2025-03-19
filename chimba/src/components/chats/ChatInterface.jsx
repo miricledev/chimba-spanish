@@ -50,7 +50,7 @@ const ChatInterface = ({setInbox}) => {
         socket.on('loadChats', (data) => {
             console.log(data)
             console.log(data[0].sender_id)
-            setMessages(prevMessages => [...prevMessages, ...data])
+            setMessages([...data])
         })
 
         return () => {
