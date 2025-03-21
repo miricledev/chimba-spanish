@@ -195,8 +195,8 @@ class DBHandler:
             
     def get_all_inboxes(self, user_id):
         if self.verify_connection():
-            query = "SELECT * FROM inbox WHERE user_id = %s;"
-            value = (user_id,)
+            query = "SELECT * FROM inbox WHERE user_id = %s OR receiver_id = %s;"
+            value = (user_id, user_id)
             try:
                 self.cursor.execute(query, value)
                 all_inboxes = self.cursor.fetchall()
