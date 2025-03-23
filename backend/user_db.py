@@ -228,6 +228,49 @@ class DBHandler:
             except Exception as e:
                 raise Exception(e)
             
+    def insert_post(self, author_id, title, description, image_url=None):
+        if self.verify_connection():
+            query = """
+                INSERT INTO posts (author_id, title, description, image_url)
+                VALUES (%s, %s, %s, %s);
+            """
+            values = (author_id, title, description, image_url)
+            try:
+                self.cursor.execute(query, values)
+                self.connection.commit()
+                return True
+            except Exception as e:
+                raise Exception(e)
+            
+    def get_all_posts(self):
+        if self.verify_connection():
+            query = """
+                SELECT post_id, author_id, title, description, image_url, like_count, comment_count, date_posted
+                FROM posts
+                ORDER BY date_posted DESC;
+            """
+            try:
+                self.cursor.execute(query)
+                posts = self.cursor.fetchall()
+                # Format posts into a list of dicts
+                posts_list = []
+                for post in posts:
+                    posts_list.append({
+                        "post_id": post[0],
+                        "author_id": post[1],
+                        "title": post[2],
+                        "description": post[3],
+                        "image_url": post[4],
+                        "like_count": post[5],
+                        "comment_count": post[6],
+                        "date_posted": post[7].isoformat()  # Converts timestamp to readable format
+                    })
+                return posts_list
+            except Exception as e:
+                raise Exception(e)
+
+
+            
             
         
     def close(self):

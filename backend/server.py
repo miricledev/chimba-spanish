@@ -252,6 +252,34 @@ def get_all_inbox():
         
         return jsonify({"error": str(e)})
     
+@app.route('/api/create/post', methods=['POST'])
+def create_post():
+    form_data = request.json
+    author_id = form_data['author_id']
+    title = form_data['title']
+    description = form_data['description']
+    image_url = form_data.get('image_url', None)  # Optional
+
+    try:
+        handler.insert_post(author_id, title, description, image_url)
+        response = {"reply": "Post created successfully!"}
+    except Exception as e:
+        response = {"reply": str(e)}
+        
+    return jsonify(response)
+
+@app.route('/api/get/posts', methods=['GET'])
+def fetch_all_posts():
+    try:
+        posts = handler.get_all_posts()
+        response = {"posts": posts}
+    except Exception as e:
+        response = {"error": str(e)}
+        
+    return jsonify(response)
+
+
+    
     
 # Socket IO functions ------------------------------------------------------------------------------------------------------------
     
