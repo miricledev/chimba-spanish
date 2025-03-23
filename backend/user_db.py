@@ -190,7 +190,16 @@ class DBHandler:
                 except Exception as e:
                     raise Exception(e)
             else:
-                return False
+                # Room exists → Update last_message
+                update_query = "UPDATE inbox SET last_message = %s WHERE room_id = %s;"
+                update_values = (last_message, room_id)
+                try:
+                    self.cursor.execute(update_query, update_values)
+                    self.connection.commit()
+                    return True
+                except Exception as e:
+                    raise Exception(e)
+
                 
             
     def get_all_inboxes(self, user_id):

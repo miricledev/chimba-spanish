@@ -9,7 +9,7 @@ const url = "http://localhost:5000"
 
 const socket = io(url)
 
-const ChatInterface = ({setInbox}) => {
+const ChatInterface = ({setInbox, setSelectedInbox}) => {
 
     const { user } = useAuth()
     const bothIDs = useParams()
@@ -52,6 +52,9 @@ const ChatInterface = ({setInbox}) => {
             console.log(data[0].sender_id)
             setMessages([...data])
         })
+
+        setSelectedInbox(roomID)
+
 
         return () => {
             socket.emit("leave", {user_id: user.id, chat_url: chatUrl, room_id: roomID})
@@ -113,7 +116,11 @@ const ChatInterface = ({setInbox}) => {
 
             </div>
         </div>
-    ) : <h2 className='text-6xl font-carlito'>Please click on a chat</h2>
+    ) : 
+    <div className='flex justify-center items-center h-full w-full'>
+
+        <h2 className='text-6xl font-carlito'>Please click on a chat</h2>
+    </div>
 }
 
 export default ChatInterface

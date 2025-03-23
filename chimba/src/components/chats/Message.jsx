@@ -5,7 +5,7 @@ const Message = ({ children, sender, date, time, id }) => {
     const { user } = useAuth();
     const isUser = sender === user.id;
 
-    const baseStyles = 'max-w-[300px] min-w-[100px] p-3 rounded-lg break-words';
+    const baseStyles = 'max-w-[300px] min-w-[100px] p-3 rounded-2xl break-words';
     const userStyles = 'bg-(--primary) text-black self-end';
     const recipientStyles = 'bg-gray-300 text-black self-start';
 
