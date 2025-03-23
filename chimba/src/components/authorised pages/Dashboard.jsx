@@ -75,32 +75,32 @@ const Dashboard = () => {
       }, []); // Empty dependency array = runs only on first load
 
     return (
-      <div className="flex flex-col items-center justify-start w-300">
-        <CreatePost popUpOn={popUpOn} closePopUp={closePopUp} createPost={createPost} />
-        <div className='flex flex-row items-center justify-center gap-5 w-full'>
-            <SearchBar placeholder='Search for posts...' />
-            <button 
-                className='btn btn-hover flex flex-row items-center gap-2 font-carlito text-xl p-2 rounded-lg text-stroke-3' 
-                onClick={openPopUp}>
-                New post <MdOutlineAddCircleOutline />
-            </button>
-        </div>
-        <div className='flex flex-col items-center gap-5 p-10 w-full'>
+        <div className="flex flex-col items-center justify-start w-350">
+            <CreatePost popUpOn={popUpOn} closePopUp={closePopUp} createPost={createPost} />
+            <div className='flex flex-row items-center justify-center gap-5 w-full'>
+                <SearchBar placeholder='Search for posts...' />
+                <button 
+                    className='btn btn-hover flex flex-row items-center gap-2 font-carlito text-xl p-2 rounded-lg text-stroke-3' 
+                    onClick={openPopUp}>
+                    New post <MdOutlineAddCircleOutline />
+                </button>
+            </div>
+            <div className='flex flex-col items-center gap-5 p-10 w-full'>
 
-            {posts && posts.map((post) => (
-                <Post
-                    key={post.post_id}
-                    username={`User${post.author_id}`} // Replace with actual username if available
-                    xp={`${post.like_count * 100}XP`} // Example XP logic
-                    title={post.title}
-                    description={post.description}
-                    hashtags={['ChimbaSpanish', 'StreetSlang']} // Static or dynamic hashtags
-                    likes={post.like_count}
-                    comments={post.comment_count}
-                />
-            ))}
+                {posts && posts.map((post) => (
+                    <Post
+                        key={post.post_id}
+                        username={`User ${post.author_id}`} // Replace with actual username if available
+                        xp={`${post.like_count * 100}XP`} // Example XP logic
+                        title={post.title}
+                        description={post.description}
+                        hashtags={['ChimbaSpanish', 'StreetSlang']} // Static or dynamic hashtags
+                        likes={post.like_count}
+                        comments={post.comment_count}
+                    />
+                ))}
+            </div>
         </div>
-      </div>
   );
   
 };

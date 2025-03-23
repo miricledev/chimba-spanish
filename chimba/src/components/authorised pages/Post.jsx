@@ -13,7 +13,7 @@ const Post = ({
   comments = 3 
 }) => {
   return (
-    <div className="border rounded-lg p-4 w-full max-w-xl mx-auto bg-white shadow-sm">
+    <div className="border-2 rounded-lg p-4 w-full max-w-xl mx-auto bg-white shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center">
@@ -46,21 +46,24 @@ const Post = ({
       </div>
 
       {/* Badge / Image Section */}
-      <div className="flex bg-gray-100 rounded-lg overflow-hidden mb-4">
-        <div className="flex items-center p-4">
-          <FaTrophy className="text-yellow-500 text-3xl mr-3" />
+      <div className="flex bg-gray-100 rounded-lg justify-between overflow-hidden mb-4">
+        <div className="flex items-center justify-center p-4">
+          <FaTrophy className="text-yellow-500 text-5xl mr-3" />
           <div>
-            <div className="text-sm">Completed by:</div>
-            <div className="font-bold">{username}</div>
+            <div className="text-xl">Completed by:</div>
+            <div className="font-bold text-2xl">{username}</div>
           </div>
         </div>
-        <div className="bg-red-500 text-white flex items-center justify-center p-4 text-center w-1/2 text-sm font-bold">
+        <div className="bg-(--primary) text-white font-carlito flex items-center justify-center p-4 text-center w-1/2 text-3xl text-stroke-3 font-bold">
           Section 5: <br /> Street Slang
         </div>
       </div>
 
+      <hr className='border-gray-400' />
+      <br />
+
       {/* Footer */}
-      <div className="flex justify-between items-center text-sm text-gray-600">
+      <div className="flex justify-center gap-10 items-center text-sm text-gray-600">
         <div className="flex items-center">
           <AiOutlineLike className="mr-1 btn-hover" />
           {likes}
