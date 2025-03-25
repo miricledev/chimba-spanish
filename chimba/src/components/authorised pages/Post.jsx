@@ -63,13 +63,13 @@ const Post = ({
       <br />
 
       {/* Footer */}
-      <div className="flex justify-center gap-10 items-center text-sm text-gray-600">
-        <div className="flex items-center">
+      <div className="flex justify-center gap-10 items-center text-sm">
+        <div className="flex items-center text-blue-600">
           <AiOutlineLike className="mr-1 btn-hover" />
           {likes}
         </div>
-        <div className="flex items-center">
-          <AiOutlineComment className="mr-1 btn-hover" />
+        <div className="flex items-center hover:underline text-(--primary)">
+          <AiOutlineComment className="mr-1 btn-hover " />
           {comments} comments
         </div>
       </div>

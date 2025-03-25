@@ -9,7 +9,7 @@ const url = "http://localhost:5000"
 
 const socket = io(url)
 
-const ChatInterface = ({setInbox, setSelectedInbox}) => {
+const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
 
     const { user } = useAuth()
     const bothIDs = useParams()
@@ -27,13 +27,23 @@ const ChatInterface = ({setInbox, setSelectedInbox}) => {
 
     const roomID = `${user1}/${user2}`
 
+    console.log(`Selectedf inbox - ${selectedInbox}`)
+
     // Set message to seen if on chat
     useEffect(() => {
 
         socket.emit('messagesSeen', {user_id: user.id})
         messagesEndRef.current?.scrollIntoView({ behaviour: "smooth" })
 
+        setSelectedInbox(roomID)
+        
+
     }, [chatUrl, messages])
+
+    useEffect(() => {
+        setInbox(prevInbox => [...prevInbox])
+        console.log('Ran useEffect in ChatInterface')
+    }, [selectedInbox])
 
 
     // Mount and unmount join / message sockets

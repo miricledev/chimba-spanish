@@ -17,22 +17,39 @@ const Inbox = () => {
         res => {
           console.log(Object.values(res.data))
           setInbox(Object.values(res.data).map(i => {
-          return(
-            <InboxTab selectedInbox={selectedInbox} room={i[1]} user={`User ${i[3]}`}>{i[4]}</InboxTab>
-          )
-        }))
+            return {
+              id: i[0],
+              room: i[1],
+              user: `User ${i[3]}`,
+              message: i[4],
+            }
+          }));
+          
       }
     )
   }, [])
 
+
+
   return (
-    <div className='w-full flex flex-row justify-center gap-10  ml-5'>
+    <div className='w-full flex flex-row justify-start gap-10  ml-5'>
       <div className='flex flex-col justify-start h-192 rounded-xl border-3'>
-        {[...inbox].reverse()}
+        {[...inbox].reverse().map(tab => (
+          <InboxTab
+            key={tab.id}
+            id={tab.id}
+            room={tab.room}
+            user={tab.user}
+            selectedInbox={selectedInbox}
+            setSelectedInbox={setSelectedInbox}
+          >
+            {tab.message}
+          </InboxTab>
+        ))}
       </div>
 
       <div>
-        <ChatInterface setSelectedInbox={setSelectedInbox} setInbox={setInbox} />
+        <ChatInterface selectedInbox={selectedInbox} setSelectedInbox={setSelectedInbox} setInbox={setInbox} />
       </div>
     </div>
   )

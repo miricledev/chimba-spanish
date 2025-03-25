@@ -12,7 +12,7 @@ const SocialBar = () => {
   
 
     return (
-        <div className='ml-5 p-3 w-full gap-8 flex flex-col justify-start'>
+        <div className='ml-5 p-3 w-350 gap-8 flex flex-col justify-start'>
             <div className='flex flex-row items-center justify-around'>
                 <Sideicon customStyle={styles} link=''>Find Users</Sideicon>
                 <Sideicon customStyle={styles} link='inbox'>Inbox</Sideicon>

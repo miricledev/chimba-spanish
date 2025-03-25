@@ -35,7 +35,7 @@ const FindUsers = () => {
 
 
     return (
-      <div className='ml-5 w-full gap-8 flex flex-col justify-center'>
+      <div className=' w-full gap-8 flex flex-col justify-center'>
         <div className='flex flex-row p-3 gap-15 items-center justify-start'>
           <div className='flex flex-row gap-3 items-center'> 
             <h1 className='font-bold text-4xl font-carlito'>
@@ -51,7 +51,7 @@ const FindUsers = () => {
           </div>)}
         </div>
         
-        <div className='flex flex-row w-full justify-start items-center flex-wrap gap-7'>{allUsers && allUsers}</div>
+        <div className="grid grid-cols-4 gap-7 w-full">{allUsers && allUsers}</div>
       </div>
   )
 }

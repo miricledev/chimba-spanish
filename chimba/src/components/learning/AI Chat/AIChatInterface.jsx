@@ -38,7 +38,10 @@ const AIChatInterface = () => {
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      resetChat();
+    } 
   }, []);
 
   useEffect(() => {
