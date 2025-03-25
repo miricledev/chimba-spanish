@@ -13,7 +13,7 @@ const Post = ({
   comments = 3 
 }) => {
   return (
-    <div className="border-2 rounded-lg p-4 w-full max-w-xl mx-auto bg-white shadow-sm">
+    <div className="border-2 flex flex-col gap-1 rounded-lg p-4 w-full max-w-xl mx-auto bg-white shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center">

@@ -18,6 +18,7 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
     const user2 = bothIDs.id2
     const chatUrl = window.location.href
     const [messages, setMessages] = useState([])
+    
     const message = useRef()
 
     const messagesEndRef = useRef()
@@ -35,7 +36,7 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
         socket.emit('messagesSeen', {user_id: user.id})
         messagesEndRef.current?.scrollIntoView({ behaviour: "smooth" })
 
-        setSelectedInbox(roomID)
+        
         
 
     }, [chatUrl, messages])
@@ -83,7 +84,9 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
                 receiver_id: receiverID,
                 room_id: roomID
             })
+            moveInboxItemToEnd(roomID, msgContent)
             message.current.value =''
+            
         }
     }
 
@@ -93,6 +96,18 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
             sendMessage()
         }
     };
+
+    const moveInboxItemToEnd = (roomID, newMessage) => {
+        setInbox(prev => {
+          const match = prev.find(item => item.room === roomID);
+          if (!match) return prev;
+      
+          const updated = { ...match, message: newMessage };
+          const rest = prev.filter(item => item.room !== roomID);
+          return [...rest, updated]; // Move updated item to end
+        });
+      };
+      
 
     
 
