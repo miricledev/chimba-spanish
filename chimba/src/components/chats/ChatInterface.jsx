@@ -13,7 +13,7 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
 
     const { user } = useAuth()
     const bothIDs = useParams()
-    console.log(`URL~: ${bothIDs}`)
+    //console.log(`URL~: ${bothIDs}`)
     const user1 = bothIDs.id1
     const user2 = bothIDs.id2
     const chatUrl = window.location.href
@@ -28,7 +28,7 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
 
     const roomID = `${user1}/${user2}`
 
-    console.log(`Selectedf inbox - ${selectedInbox}`)
+    //console.log(`Selectedf inbox - ${selectedInbox}`)
 
     // Set message to seen if on chat
     useEffect(() => {
@@ -43,7 +43,7 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
 
     useEffect(() => {
         setInbox(prevInbox => [...prevInbox])
-        console.log('Ran useEffect in ChatInterface')
+        //console.log('Ran useEffect in ChatInterface')
     }, [selectedInbox])
 
 
@@ -59,8 +59,8 @@ const ChatInterface = ({setInbox, setSelectedInbox, selectedInbox}) => {
         })
 
         socket.on('loadChats', (data) => {
-            console.log(data)
-            console.log(data[0].sender_id)
+            //console.log(data)
+            //console.log(data[0].sender_id)
             setMessages([...data])
         })
 

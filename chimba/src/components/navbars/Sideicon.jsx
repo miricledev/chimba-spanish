@@ -13,7 +13,7 @@ const Sideicon = ({children, link, Icon, customStyle}) => {
 
     const isActive = loc.pathname.split('/').filter(Boolean).pop() === link || loc.pathname === res.pathname;
 
-    console.log(loc.pathname)
+    //console.log(loc.pathname)
 
     return (
         <div>

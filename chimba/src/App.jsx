@@ -16,6 +16,8 @@ import FreeNav from './components/navbars/FreeNav'
 import './App.css'
 import Sidebar from './components/navbars/Sidebar'
 import SocialBar from './components/navbars/SocialBar'
+import LearnSidebar from './components/navbars/LearnSidebar'
+import Roadmap from './components/learning/Lessons/Roadmap'
 
 const App = () => {
 
@@ -29,9 +31,14 @@ const App = () => {
                 {/* Authorised routes: will redirect to login if not authorised */}
                 <Route path='1/' element={<AuthorisedPagesProtector />}>
                   <Route index element={<Dashboard />} />
-                  <Route path='flashcards' element={<FlashcardApp />} />
+
+                  <Route path='learn' element={<LearnSidebar />}>
+                    <Route index element={<Roadmap />} />
+                    <Route path='flashcards' element={<FlashcardApp />} />
+                    <Route path='readingcomp' element={<ReadingComp />} />
+                  </Route>
+
                   <Route path='aichat' element={<AIChatInterface />} />
-                  <Route path='readingcomp' element={<ReadingComp />} />
                   
                   <Route path='social' element={<SocialBar />}>
                     <Route index element={<FindUsers />} />
@@ -40,6 +47,7 @@ const App = () => {
                       <Route index element={<Inbox />} />
                       <Route path='chats/:id1/:id2' element={<Inbox />} />
                     </Route>
+
                   </Route>
                   
                 </Route>
@@ -48,6 +56,7 @@ const App = () => {
                   <Route path='login' element={<Login />} />
                   <Route path='register' element={<Register />} />
                 </Route>
+                
                 <Route index element={<Home />} />
               </Route>
             </Routes>

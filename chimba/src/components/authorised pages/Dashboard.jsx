@@ -37,7 +37,7 @@ const Dashboard = () => {
           });
       
           if (response.data.reply === "Post created successfully!") {
-            console.log("Post added!");
+            //console.log("Post added!");
       
             // Immediately update client-side state
             const newPost = {

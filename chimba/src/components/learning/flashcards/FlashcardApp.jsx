@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Flashcard from './Flashcard';
 import { useAuth } from "../../authorisation/AuthProvider";
-import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
+import { FaArrowCircleRight, FaArrowCircleLeft, FaTrash } from "react-icons/fa";
 import { FaShuffle } from "react-icons/fa6";
 import { IconContext } from "react-icons";
 
@@ -16,7 +16,12 @@ const FlashcardApp = () => {
         axios.post('/api/get/terms', { id: user.id })
             .then(res => {
                 setFlashcardSet(Object.entries(res.data).map(([term, definition]) => (
-                    <Flashcard term={term} definition={definition} flashcardShown={flashcardShown} />
+                    <Flashcard
+                        key={term}
+                        term={term}
+                        definition={definition}
+                        flashcardShown={flashcardShown}
+                    />
                 )));
                 setLoading(false);
             });
@@ -35,30 +40,41 @@ const FlashcardApp = () => {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+        setFlashcardShown(0)
         return array;
     };
 
     return !loading ? (
-      <div className="flashcard-app">
-          {/* Background Curved Stripes */}
-          
-          <h2>Flashcards</h2>
-          {flashcardSet[flashcardShown]}
-  
-          <div className="nav-buttons">
-              <IconContext.Provider value={{ className: "nav-button" }}>
-                  <button onClick={decrementIndex}><FaArrowCircleLeft /></button>
-                  <button onClick={incrementIndex}><FaArrowCircleRight /></button>
-              </IconContext.Provider>
-          </div>
-  
-          <p className="flashcard-counter">{`${flashcardShown + 1}/${flashcardSet.length}`}</p>
-  
-          <IconContext.Provider value={{ className: "shuffle-button" }}>
-              <button onClick={() => setFlashcardSet(prev => shuffle([...prev]))}><FaShuffle /></button>
-          </IconContext.Provider>
-      </div>
-  ) : <p className="loading-text">Loading...</p>;
+        <div className="flex flex-col items-center w-250 justify-center gap-6 min-h-screen px-4">
+            <h2 className="text-4xl font-bold text-center">Review Flashcards</h2>
+
+            {flashcardSet[flashcardShown]}
+
+            <div className="flex items-center gap-15 mt-4">
+                <button onClick={decrementIndex}>
+                    <FaArrowCircleLeft size={36} />
+                </button>
+
+                <span className="text-2xl font-semibold">{`${flashcardShown + 1}/${flashcardSet.length}`}</span>
+
+                <button className=" hover:scale-110 transition" onClick={() => setFlashcardSet(prev => shuffle([...prev]))}>
+                    <FaShuffle size={28} />
+                </button>
+
+                <button>
+                    <FaTrash size={24} />
+                </button>
+
+                <button onClick={incrementIndex}>
+                    <FaArrowCircleRight size={36} />
+                </button>
+            </div>
+
+            
+        </div>
+    ) : (
+        <p className="text-center text-2xl mt-10">Loading...</p>
+    );
 };
 
 export default FlashcardApp;
