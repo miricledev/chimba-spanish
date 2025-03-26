@@ -45,28 +45,30 @@ const FlashcardApp = () => {
     };
 
     return !loading ? (
-        <div className="flex flex-col items-center w-250 justify-center gap-6 min-h-screen px-4">
+        <div className="flex flex-col items-center w-250 justify-start mt-30 overflow-hidden gap-6 px-4">
             <h2 className="text-4xl font-bold text-center">Review Flashcards</h2>
 
             {flashcardSet[flashcardShown]}
 
             <div className="flex items-center gap-15 mt-4">
                 <button onClick={decrementIndex}>
-                    <FaArrowCircleLeft size={36} />
+                    <FaArrowCircleLeft className='btn-hover' size={36} />
+                </button>
+
+                <button className=" hover:scale-110 transition btn-hover" onClick={() => setFlashcardSet(prev => shuffle([...prev]))}>
+                    <FaShuffle size={28} />
                 </button>
 
                 <span className="text-2xl font-semibold">{`${flashcardShown + 1}/${flashcardSet.length}`}</span>
 
-                <button className=" hover:scale-110 transition" onClick={() => setFlashcardSet(prev => shuffle([...prev]))}>
-                    <FaShuffle size={28} />
-                </button>
+
 
                 <button>
-                    <FaTrash size={24} />
+                    <FaTrash className='btn-hover' size={24} />
                 </button>
 
                 <button onClick={incrementIndex}>
-                    <FaArrowCircleRight size={36} />
+                    <FaArrowCircleRight className='btn-hover' size={36} />
                 </button>
             </div>
 

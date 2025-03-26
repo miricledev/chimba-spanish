@@ -1,19 +1,17 @@
-Generate articles either with web scraping or genAI, either way needs to have a reading comprehension set of answers
-that the user can answer. And on every page refresh it needs to be different.
+Make posts likeable
 
+Add comments to posts
 
-Learn how to train AI models
+Make flashcards addable
 
-Add stricter scripts for emails, passwords, phone numbers
-- Email checker
-- Password requirements
-- Check that is a phone number
+Make message updates live with socketIO
 
+Create folder system for flashcards
 
-Store the logged in state in local storage on the client side
-- Revisit routing module on Scrimba
+Design lesson formats in Chimba
 
-Start designing what pages I will include
-- Once done, create a navbar in a template component
+Create profile editor
 
-Research machine learning for language models
+Allow people to submit photos when posting to feed
+
+Design directions practice system

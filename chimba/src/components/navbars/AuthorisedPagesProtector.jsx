@@ -31,7 +31,7 @@ const AuthorisedPagesProtector = () => {
                     Chimba
                 </h2>
 
-                <h3>Hello, {user.firstName}</h3>
+                <h3 className='text-lg '>Hello, <span className='font-bold'>{user.firstName} </span>👋</h3>
 
                     <Sideicon Icon={PiCoffeeDuotone } link={'/1/'}>Feed</Sideicon>
                     <Sideicon Icon={GiBrain } link={'/1/learn'}>Learn</Sideicon>

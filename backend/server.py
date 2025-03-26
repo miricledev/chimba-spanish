@@ -146,6 +146,25 @@ def insert_flashcards():
         response = {"reply": str(e)}
         
     return jsonify(response)
+
+@app.route('/api/set/terms-array', methods=['POST'])
+def insert_flashcards_array():
+    data = request.json
+    user_id = data['id']
+    flashcards = data['flashcards']  # array of { term, definition }
+
+    try:
+        for card in flashcards:
+            term = card['term']
+            definition = card['definition']
+            handler.insert_new_flashcards(user_id, term, definition)
+
+        response = {"reply": "success"}
+    except Exception as e:
+        response = {"reply": str(e)}
+        
+    return jsonify(response)
+
     
 
 

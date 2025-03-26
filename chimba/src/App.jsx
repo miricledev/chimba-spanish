@@ -18,6 +18,8 @@ import Sidebar from './components/navbars/Sidebar'
 import SocialBar from './components/navbars/SocialBar'
 import LearnSidebar from './components/navbars/LearnSidebar'
 import Roadmap from './components/learning/Lessons/Roadmap'
+import FlashcardNav from './components/navbars/FlashcardNav'
+import AddFC from './components/learning/flashcards/AddFC'
 
 const App = () => {
 
@@ -34,7 +36,12 @@ const App = () => {
 
                   <Route path='learn' element={<LearnSidebar />}>
                     <Route index element={<Roadmap />} />
-                    <Route path='flashcards' element={<FlashcardApp />} />
+
+                    <Route path='flashcards' element={<FlashcardNav />}>
+                      <Route index element={<FlashcardApp />} />
+                      <Route path='add' element={<AddFC/>} />
+                    </Route>
+
                     <Route path='readingcomp' element={<ReadingComp />} />
                   </Route>
 
@@ -56,7 +63,7 @@ const App = () => {
                   <Route path='login' element={<Login />} />
                   <Route path='register' element={<Register />} />
                 </Route>
-                
+
                 <Route index element={<Home />} />
               </Route>
             </Routes>

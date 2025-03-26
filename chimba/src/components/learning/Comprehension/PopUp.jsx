@@ -26,7 +26,7 @@ export const PopUp = ({ children, popUpOn, closePopUp }) => {
 
     useEffect(() => {
         if (popUpOn) {
-            axios.post("/translate", {
+            axios.post("/api/translate", {
                 text: childrenText,
                 targetLang: 'EN',
             })
@@ -38,7 +38,7 @@ export const PopUp = ({ children, popUpOn, closePopUp }) => {
     }, [popUpOn]);
 
     const addToFlashcards = () => {
-        axios.post('/set/terms', {
+        axios.post('/api/set/terms', {
             id: user.id,
             term: childrenText,
             definition: translatedWord
