@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAuth } from '../authorisation/AuthProvider';
+import { useAuth } from '../components/authorisation/AuthProvider';
 import { Outlet, Link } from 'react-router-dom';
 import { IoMail, IoMailUnreadSharp } from "react-icons/io5";
 import { IconContext } from 'react-icons';

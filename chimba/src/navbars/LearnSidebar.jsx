@@ -1,7 +1,13 @@
-import React, { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { FaChevronLeft, FaChevronRight, FaBook, FaClone, FaNewspaper, FaMapSigns, FaCommentDots } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { CgAddR } from "react-icons/cg";
+import axios from 'axios';
+import { useAuth } from '../components/authorisation/AuthProvider';
+import { countryInfo } from '../components/HomeComponents/storage/country';
+import CourseSelect from './utilities/CourseSelect';
+
 
 const Sideicon = ({ icon, link, label, collapsed }) => (
   <Link to={link} className='flex items-center gap-3 p-3 hover:bg-gray-200 rounded-xl w-full justify-center text-xl md:justify-start'>
@@ -11,9 +17,30 @@ const Sideicon = ({ icon, link, label, collapsed }) => (
 )
 
 const LearnSidebar = () => {
+
   const [collapsed, setCollapsed] = useState(false)
 
   const sidebarWidth = collapsed ? 64 : 280 // tailwind units: 16 vs 70
+
+  const nav = useNavigate()
+
+  const [courseIds, setCourseIds] = useState([]);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    axios
+      .get('/api/get/user-course-ids', { params: { user_id: user.id } })
+      .then((res) => {
+        console.log(res.data.course_ids)
+        setCourseIds(res.data.course_ids); // Example: [1, 3, 5]
+      })
+      .catch((err) => {
+        console.error('Failed to fetch course IDs:', err);
+      });
+  }, [user]);
 
   return (
     <div className='flex'>
@@ -22,13 +49,17 @@ const LearnSidebar = () => {
         className={`fixed top-0 ml-100 left-0 h-screen bg-white border-r-2 flex flex-col justify-between items-center transition-all duration-300`}
         style={{ width: sidebarWidth }}
       >
-        <div className='flex flex-col items-center gap-5 mt-25 w-full px-3'>
+        <div className='flex flex-col items-center gap-5 mt-10 w-full px-3'>
           {!collapsed && (
-            <div className='flex flex-row border p-3 rounded-lg w-[70%] justify-between items-center'>
+            <div className='flex flex-row border p-3 rounded-lg w-full justify-between items-center'>
               <h2 className='text-2xl font-bold font-carlito'>Course:</h2>
-              <select className=' p-1 rounded-md'>
-                <option>Flag</option>
-              </select>
+
+
+
+              <CourseSelect courseIds={courseIds} />
+
+
+
             </div>
           )}
 

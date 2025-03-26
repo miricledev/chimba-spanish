@@ -268,6 +268,42 @@ class DBHandler:
                 return posts_list
             except Exception as e:
                 raise Exception(e)
+            
+    def insert_user_course(self, user_id, course_id):
+        if self.verify_connection:
+            self.cursor.execute("SELECT * FROM users WHERE user_id = %s;", (user_id,))
+            if self.cursor.fetchone():
+                self.cursor.execute("SELECT * FROM courses WHERE course_id = %s;", (course_id,))
+                if self.cursor.fetchone():
+                    query = """
+                        INSERT INTO user_courses(user_id, course_id)
+                        VALUES (%s, %s)
+                        ON CONFLICT (user_id, course_id) DO NOTHING;
+                    """
+                    self.cursor.execute(query, (user_id, course_id))
+                    self.connection.commit()
+                else:
+                    raise Exception("Course with this id does not exist")
+            else:
+                raise Exception("User with this id does not exist")
+            
+            
+    def get_user_course_ids(self, user_id):
+        if self.verify_connection:
+            self.cursor.execute("SELECT * FROM users WHERE user_id = %s;", (user_id,))
+            if not self.cursor.fetchone():
+                raise Exception("User with this id does not exist")
+
+            self.cursor.execute("""
+                SELECT course_id
+                FROM user_courses
+                WHERE user_id = %s;
+            """, (user_id,))
+            rows = self.cursor.fetchall()
+
+            return [row[0] for row in rows]  # return just course_id values
+
+
 
 
             

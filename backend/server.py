@@ -297,6 +297,34 @@ def fetch_all_posts():
         
     return jsonify(response)
 
+@app.route('/api/set/user-course', methods=['POST'])
+def insert_user_course():
+    form_data = request.json
+    user_id = form_data['user_id']
+    course_id = form_data['course_id']
+
+    try:
+        handler.insert_user_course(user_id, course_id)
+        response = {"reply": "success"}
+    except Exception as e:
+        response = {"reply": str(e)}
+
+    return jsonify(response)
+
+@app.route('/api/get/user-course-ids', methods=['GET'])
+def get_user_course_ids():
+    user_id = request.args.get('user_id')
+
+    try:
+        course_ids = handler.get_user_course_ids(user_id)
+        response = { "course_ids": course_ids }
+    except Exception as e:
+        response = { "error": str(e) }
+
+    return jsonify(response)
+
+
+
 
     
     

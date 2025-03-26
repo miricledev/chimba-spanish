@@ -84,13 +84,13 @@ const EditProfilePage = ({ user, onSave, onCancel }) => {
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+          className="px-4 cursor-pointer py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-[var(--primary)] text-white rounded hover:opacity-90 transition"
+          className="px-4 cursor-pointer py-2 bg-[var(--primary)] text-white rounded hover:opacity-90 transition"
         >
           Save
         </button>

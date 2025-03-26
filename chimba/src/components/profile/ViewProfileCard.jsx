@@ -18,7 +18,7 @@ const ViewProfileCard = ({ user, onEdit }) => {
         <h2 className="text-3xl font-bold text-[var(--primary)]">My Profile</h2>
         <button
           onClick={onEdit}
-          className="text-sm text-white bg-[var(--primary)] px-4 py-2 rounded hover:opacity-90 transition"
+          className="text-sm btn-hover text-white bg-[var(--primary)] px-4 py-2 rounded hover:opacity-90 transition"
         >
           Edit Profile
         </button>

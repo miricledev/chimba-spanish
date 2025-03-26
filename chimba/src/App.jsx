@@ -3,7 +3,7 @@ import Register from './components/registration/Register'
 import Login from './components/login/Login'
 import AuthProvider from './components/authorisation/AuthProvider'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import AuthorisedPagesProtector from './components/navbars/AuthorisedPagesProtector'
+import AuthorisedPagesProtector from './navbars/AuthorisedPagesProtector'
 import Dashboard from './components/authorised pages/Dashboard'
 import Home from './components/HomeComponents/Home'
 import FlashcardApp from './components/learning/flashcards/FlashcardApp'
@@ -12,16 +12,17 @@ import ReadingComp from './components/learning/Comprehension/ReadingComp'
 import FindUsers from './components/chats/FindUsers'
 import ChatInterface from './components/chats/ChatInterface'
 import Inbox from './components/chats/Inbox'
-import FreeNav from './components/navbars/FreeNav'
+import FreeNav from './navbars/FreeNav'
 import './App.css'
-import Sidebar from './components/navbars/Sidebar'
-import SocialBar from './components/navbars/SocialBar'
-import LearnSidebar from './components/navbars/LearnSidebar'
+import Sidebar from './navbars/Sidebar'
+import SocialBar from './navbars/SocialBar'
+import LearnSidebar from './navbars/LearnSidebar'
 import Roadmap from './components/learning/Lessons/Roadmap'
-import FlashcardNav from './components/navbars/FlashcardNav'
+import FlashcardNav from './navbars/FlashcardNav'
 import AddFC from './components/learning/flashcards/AddFC'
 import ViewProfilePage from './components/profile/ViewProfilePage'
 import EditProfilePage from './components/profile/EditProfilePage'
+import DialectSelector from './components/courses/DialectSelector'
 
 const App = () => {
 
@@ -38,6 +39,8 @@ const App = () => {
 
                   <Route path='learn' element={<LearnSidebar />}>
                     <Route index element={<Roadmap />} />
+
+                    <Route path='select' element={<DialectSelector />} />
 
                     <Route path='flashcards' element={<FlashcardNav />}>
                       <Route index element={<FlashcardApp />} />
