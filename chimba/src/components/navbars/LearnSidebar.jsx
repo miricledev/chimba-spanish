@@ -22,7 +22,7 @@ const LearnSidebar = () => {
         className={`fixed top-0 ml-100 left-0 h-screen bg-white border-r-2 flex flex-col justify-between items-center transition-all duration-300`}
         style={{ width: sidebarWidth }}
       >
-        <div className='flex flex-col items-center gap-5 mt-5 w-full px-3'>
+        <div className='flex flex-col items-center gap-5 mt-25 w-full px-3'>
           {!collapsed && (
             <div className='flex flex-row border p-3 rounded-lg w-[70%] justify-between items-center'>
               <h2 className='text-2xl font-bold font-carlito'>Course:</h2>

@@ -20,6 +20,8 @@ import LearnSidebar from './components/navbars/LearnSidebar'
 import Roadmap from './components/learning/Lessons/Roadmap'
 import FlashcardNav from './components/navbars/FlashcardNav'
 import AddFC from './components/learning/flashcards/AddFC'
+import ViewProfilePage from './components/profile/ViewProfilePage'
+import EditProfilePage from './components/profile/EditProfilePage'
 
 const App = () => {
 
@@ -56,6 +58,9 @@ const App = () => {
                     </Route>
 
                   </Route>
+
+                  <Route path="profile" element={<ViewProfilePage />} />
+                  
                   
                 </Route>
                 {/* Un-authorised routes: no user login status checks required (public pages) */}

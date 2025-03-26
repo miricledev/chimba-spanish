@@ -33,12 +33,15 @@ const AuthorisedPagesProtector = () => {
 
                 <h3 className='text-lg '>Hello, <span className='font-bold'>{user.firstName} </span>👋</h3>
 
+                <div className='flex flex-col items-start gap-1'>
+
                     <Sideicon Icon={PiCoffeeDuotone } link={'/1/'}>Feed</Sideicon>
                     <Sideicon Icon={GiBrain } link={'/1/learn'}>Learn</Sideicon>
                     <Sideicon Icon={FaRobot } link={'/1/aichat'}>AI Chat</Sideicon>
                     <Sideicon Icon={TiMessages } link={'/1/social'}>Social</Sideicon>
                     <Sideicon Icon={MdOutlinePersonSearch } link={'/1/findtutors'}>Find Tutor</Sideicon>
                     <Sideicon Icon={CgProfile } link={'/1/profile'}>Profile</Sideicon>
+                </div>
         
                 {/* Logout Button */}
                 <button onClick={logout} className="navbar-button mt-5 text-white text-lg font-bold px-4 py-2 bg-red-600 rounded-md hover:bg-red-700 transition">
@@ -48,7 +51,7 @@ const AuthorisedPagesProtector = () => {
     
             {/* Page Content */}
             <div className='ml-100 p-10'><Outlet /></div>
-      </div>
+        </div>
 
     ) : (
         <p className="redirect-message">Redirecting to login page...</p>

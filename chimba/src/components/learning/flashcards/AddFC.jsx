@@ -49,7 +49,7 @@ const AddFC = () => {
   return (
     <div className='p-5 flex items-center justify-center w-250 h-full mt-30 flex-col gap-10'>
       {flashcards.map((card, index) => (
-        <div className='flex flex-row items-center p-5 border-1 rounded-2xl' key={index}>
+        <div className='flex flex-row w-200 items-center p-5 border-1 rounded-2xl' key={index}>
           <input
             type="text"
             placeholder="Term"
@@ -64,7 +64,15 @@ const AddFC = () => {
             onChange={(e) => handleInputChange(index, "definition", e.target.value)}
             className='p-2 placeholder: text-3xl placeholder:font-carlito placeholder:font-bold'
           />
-          <button className='text-2xl cursor-pointer btn-hover' onClick={() => handleRemove(index)}><FaTrashAlt /></button>
+          {index !== 0 && (
+            <button
+              onClick={() => handleRemove(index)}
+              className='text-2xl cursor-pointer btn-hover'
+            >
+              <FaTrashAlt />
+            </button>
+            )
+          }
         </div>
           )
         )

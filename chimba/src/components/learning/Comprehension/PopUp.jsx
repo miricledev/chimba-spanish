@@ -49,34 +49,59 @@ export const PopUp = ({ children, popUpOn, closePopUp }) => {
 
     return (
         <div>
-            <Modal
-                isOpen={popUpOn}
-                onRequestClose={closePopUp}
-                contentLabel={children}
-                style={{
-                  overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-                  content: { width: "50%", margin: "auto", padding: "20px", borderRadius: "10px" }
-              }}
-            >
-                <button onClick={closePopUp} className="popup-close-button">
-                    <IoCloseSharp />
-                </button>
+  <Modal
+    isOpen={popUpOn}
+    onRequestClose={closePopUp}
+    contentLabel={children}
+    style={{
+      overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+      content: {
+        width: "90%",
+        maxWidth: "500px",
+        margin: "auto",
+        padding: "0",
+        borderRadius: "0.75rem",
+        border: "none",
+        inset: "50% auto auto 50%",
+        transform: "translate(-50%, -50%)",
+      },
+    }}
+  >
+    <div className="p-6 bg-white rounded-xl shadow-lg">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-(--primary)">{children}</h2>
+        <button onClick={closePopUp} className="text-gray-400 hover:text-red-500 transition">
+          <IoCloseSharp size={24} />
+        </button>
+      </div>
 
-                <h2 className="popup-title">{children}</h2>
+      {translatedWord && (
+        <p className="mb-4 text-gray-700 text-base italic">{translatedWord}</p>
+      )}
 
-                {translatedWord && (<p className="popup-translation">{translatedWord}</p>)}
+      <div className="flex items-center gap-4 mb-4">
+        <button
+          onClick={speak}
+          className="p-2 rounded-full hover:bg-gray-100 transition text-(--primary)"
+          title="Pronounce"
+        >
+          <PiUserSoundBold size={20} />
+        </button>
 
-                <div className="popup-buttons">
-                    <button onClick={speak} className="popup-icon-button">
-                        <PiUserSoundBold />
-                    </button>
-                    <button onClick={addToFlashcards} className="popup-button">
-                        Add to flashcards
-                    </button>
-                </div>
+        <button
+          onClick={addToFlashcards}
+          className="px-4 py-2 rounded-lg bg-(--primary) text-white hover:opacity-90 transition font-medium"
+        >
+          Add to flashcards
+        </button>
+      </div>
 
-                {insertSuccess && (<p className="popup-translation">{insertSuccess}</p>)}
-            </Modal>
-        </div>
+      {insertSuccess && (
+        <p className="text-sm text-green-600">{insertSuccess}</p>
+      )}
+    </div>
+  </Modal>
+</div>
+
     );
 };
