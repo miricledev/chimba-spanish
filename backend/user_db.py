@@ -71,31 +71,40 @@ class DBHandler:
         
     def verify_user_login(self, email, password):
         if self.verify_connection():
-            # Check where email exists in db and compare with password at given row
             user_row = self.verify_user_exists(email)
             if user_row:
-                #comparing the encrypted password with the entered one with bcrypt
-                if bcrypt.checkpw(password.encode(), user_row[4].tobytes()):
+                stored_hash = user_row[4]
+                if bcrypt.checkpw(password.encode(), bytes(stored_hash)):
                     return True
+
                 else:
                     raise Exception("Incorrect password")
             else:
                 raise Exception("No account with this email exists")
+
             
-            
-        
+                
     def verify_user_exists(self, email):
-        self.cursor.execute("SELECT * FROM users WHERE email = %s;", (email,))
+        self.cursor.execute("""
+            SELECT user_id, firstname, lastname, email, password, account_type
+            FROM users
+            WHERE email = %s;
+        """, (email,))
+        
         user = self.cursor.fetchone()
+        
         if user:
+            print(user, flush=True)
             return user
         return False
+
+
     
     
     
     def get_all_rows(self):
         if self.verify_connection():
-            self.cursor.execute("SELECT (user_id, firstname, lastname) FROM users;")
+            self.cursor.execute("SELECT (user_id, firstname, lastname, account_type) FROM users;")
             return self.cursor.fetchall()
         
         

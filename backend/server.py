@@ -91,31 +91,44 @@ def register():
 @app.route("/api/login", methods=["POST"])
 def login():
     form_data = request.json
-    
+
     # Extract form details
     email = str(form_data['email'])
     password = str(form_data['password'])
-    
-    # default
+
+    # Default
     user_data = None
-    
+
     try:
+        # Verify credentials (assumes it raises on failure)
         handler.verify_user_login(email, password)
-        
-        # get the new users data to send in the response
+
+        # Get user info
         user_data = handler.verify_user_exists(email)
+
+        if not user_data:
+            raise Exception("User not found after login")
+
+        # Unpack tuple
+        user_id, first_name, last_name, email, password, account_type = user_data
+
         response = {
-            "reply": 'logged in',
-            "user_data": {'id': user_data[0], 
-                          'firstName': user_data[1],
-                          "lastName": user_data[2],
-                          "email": user_data[3]
-                          }
+            "reply": "logged in",
+            "user_data": {
+                "id": user_id,
+                "firstName": first_name,
+                "lastName": last_name,
+                "email": email,
+                "account_type": account_type
             }
+        }
+
     except Exception as e:
+        print(user_data, flush=True)
         response = {"reply": str(e)}
-        
+
     return jsonify(response)
+
 
 @app.route("/api/get/terms", methods=['POST'])
 def get_flashcards():

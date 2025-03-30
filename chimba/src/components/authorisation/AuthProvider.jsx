@@ -11,6 +11,7 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null)
 
     const login = (userDetails) => {
+      console.log(userDetails)
       setUser(userDetails)
     }
 

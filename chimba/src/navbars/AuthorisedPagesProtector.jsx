@@ -31,7 +31,7 @@ const AuthorisedPagesProtector = () => {
                     Chimba
                 </h2>
 
-                <h3 className='text-lg '>Hello, <span className='font-bold'>{user.firstName} </span>👋</h3>
+                <h3 className='text-lg '>Hello, <span className='font-bold'>{user.firstName} {user.account_type} </span>👋</h3>
 
                 <div className='flex flex-col items-start gap-1'>
 

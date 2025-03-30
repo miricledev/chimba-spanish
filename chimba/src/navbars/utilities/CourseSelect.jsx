@@ -16,7 +16,7 @@ const CourseSelect = ({ courseIds }) => {
     setSelectedId(id);
     setIsOpen(false);
     console.log("Selected course id:", id);
-  };
+  }; 
 
   const handleAddNew = () => {
     nav('/1/learn/select');
