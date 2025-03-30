@@ -44,26 +44,33 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
+  
     axios.post("/api/login", {
       email: email.current.value,
       password: password.current.value
-    }).then(
-      res => {
-        if(res.data.user_data){
-          login(res.data.user_data)
-          navigate('/1/')
-          } else{
-            setLoginResponse(res.data.reply)
-          }
+    })
+    .then(res => {
+      if (res.data.user_data) {
+        const user = res.data.user_data;
+        login(user); // update auth context
+  
+        // Redirect based on account type
+        if (user.account_type === 2) {
+          navigate('/2/');
+        } else {
+          navigate('/1/');
         }
-    ).catch(
-      error => {
-        console.log(error)
-        setLoginResponse(error.message)
+  
+      } else {
+        setLoginResponse(res.data.reply);
       }
-    )
-  }
+    })
+    .catch(error => {
+      console.log(error);
+      setLoginResponse(error.message);
+    });
+  };
+  
 
   return (  
         <div className="flex flex-col items-center justify-center w-full h-screen">
