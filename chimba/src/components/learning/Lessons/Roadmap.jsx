@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaStar, FaPlay, FaHeart, FaMagic, FaCloud } from 'react-icons/fa';
+import { useAuth } from '../../authorisation/AuthProvider';
 
 const colors = [
   'cyan', 'skyblue', 'violet', 'limegreen', 'gold', 'salmon', 'orchid', 'coral', 'turquoise'
@@ -11,15 +12,23 @@ const randomAngle = () => `${Math.floor(Math.random() * 360)}deg`;
 const randomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
 const Roadmap = () => {
+
+  const { selectedCourse} = useAuth()
+
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  
+  useEffect(() => {
+      console.log('Selected course changed:', selectedCourse);
+  }, [selectedCourse]);  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [lessonsRes] = await Promise.all([
-          axios.post('/api/get/lessons', { course_id: 1 })
+          axios.post('/api/get/lessons', { course_id: selectedCourse })
         ]);
         setLessons(lessonsRes.data);
       } catch (err) {
@@ -30,7 +39,7 @@ const Roadmap = () => {
     };
 
     fetchData();
-  }, []);
+  }, [selectedCourse]);
 
   const handleClick = (lesson) => {
     navigate(`${lesson.lesson_id}`, { state: { lesson } });
@@ -59,7 +68,7 @@ const Roadmap = () => {
       {clouds.map((cloud) => (
         <div
           key={cloud.id}
-          className="absolute bg-primary/10 rounded-full blur-3xl opacity-60 animate-cloud float-slow"
+          className="absolute bg-(--primary)/10 rounded-full  opacity-80 animate-cloud float-slow"
           style={{
             top: cloud.top,
             left: cloud.left,

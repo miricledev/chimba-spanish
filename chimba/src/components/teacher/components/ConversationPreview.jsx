@@ -49,7 +49,7 @@ export const ConversationPreview = ({ dialogue }) => {
                           key={optIdx}
                           onClick={() => setSelectedOption(optIdx)}
                           disabled={showFeedback}
-                          className={`w-full text-left p-3 rounded-lg border transition-all ${
+                          className={`w-full cursor-pointer text-left p-3 rounded-lg border transition-all ${
                             selectedOption === optIdx
                               ? 'border-(--primary) bg-(--primary-light)'
                               : 'border-gray-300 hover:border-gray-400'
@@ -114,7 +114,7 @@ export const ConversationPreview = ({ dialogue }) => {
             <button
               onClick={handleNext}
               disabled={currentItem.type === 'question' && !showFeedback}
-              className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${
+              className={`flex items-center cursor-pointer gap-2 px-6 py-2 rounded-full font-medium transition-all ${
                 currentItem.type === 'question' && !showFeedback
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   : 'bg-(--primary) text-white hover:brightness-90 shadow-md hover:shadow-lg'

@@ -14,9 +14,7 @@ const Login = () => {
     console.log('Entered login page: user state: ', user)
 
     // If user is already logged in, redirect from this page to dashboard
-    if(user){
-      return navigate('/1/')
-    }
+   
 
     window.addEventListener("keydown", (event) => {
       if(event.code === "Enter"){

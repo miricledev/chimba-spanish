@@ -6,7 +6,7 @@ import { ConversationPreview } from '../../teacher/components/ConversationPrevie
 import MatchingGame from '../../teacher/components/utilities/MatchingGame';
 
 const LessonStepViewer = ({ lesson, show, onClose }) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [confirmClose, setConfirmClose] = useState(false);
   const [vocabReviewed, setVocabReviewed] = useState(false);
 
@@ -22,7 +22,7 @@ const LessonStepViewer = ({ lesson, show, onClose }) => {
   ];
 
   useEffect(() => {
-    if (!show) setCurrentStep(1);
+    if (!show) setCurrentStep(0);
   }, [show]);
 
   const nextStep = () => {
@@ -45,11 +45,11 @@ const LessonStepViewer = ({ lesson, show, onClose }) => {
 
     switch (section) {
       case 'video':
-        return lesson.videoURL && (
+        return lesson.video_url && (
           <div className={sectionStyle}>
             <h2 className="text-2xl font-semibold mb-4">📺 Video</h2>
             <iframe
-              src={lesson.videoURL.replace('watch?v=', 'embed/')}
+              src={lesson.video_url.replace('watch?v=', 'embed/')}
               className="w-full aspect-video rounded-lg"
               allowFullScreen
             />
@@ -57,10 +57,10 @@ const LessonStepViewer = ({ lesson, show, onClose }) => {
         );
 
       case 'audio':
-        return lesson.audioURL && (
+        return lesson.audio_url && (
           <div className={sectionStyle}>
             <h2 className="text-2xl font-semibold mb-4">🔊 Audio</h2>
-            <audio controls src={lesson.audioURL} className="w-full" />
+            <audio controls src={lesson.audio_url} className="w-full" />
           </div>
         );
 
@@ -102,7 +102,7 @@ const LessonStepViewer = ({ lesson, show, onClose }) => {
 
       case 'culturalNote':
         return (
-          <div className={`${sectionStyle} bg-yellow-50 border-l-4 border-yellow-400`}>
+          <div className={`${sectionStyle} bg-yellow-50 w-100 ml-[38%] border-l-4 border-yellow-400`}>
             <h2 className="text-2xl font-semibold mb-4">🧠 Nota cultural</h2>
             <p className="text-gray-700">{lesson.cultural_note}</p>
           </div>
@@ -147,7 +147,7 @@ const LessonStepViewer = ({ lesson, show, onClose }) => {
           >
             {/* Close Button */}
             <button
-              className="absolute top-4 right-4 text-xl text-gray-600 hover:text-red-500"
+              className="absolute cursor-pointer top-4 right-4 text-xl text-gray-600 hover:text-red-500"
               onClick={() => setConfirmClose(true)}
             >
               <FaTimes />
@@ -167,7 +167,7 @@ const LessonStepViewer = ({ lesson, show, onClose }) => {
               {currentStep < sections.length - 1 && (
                 <button
                   onClick={nextStep}
-                  className="bg-gradient-to-r from-(--primary) to-pink-400 hover:from-pink-500 hover:to-(--primary) text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg transition"
+                  className="bg-gradient-to-r cursor-pointer from-(--primary) to-pink-400 hover:from-pink-500 hover:to-(--primary) text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg transition"
                 >
                   ➡️ Siguiente
                 </button>

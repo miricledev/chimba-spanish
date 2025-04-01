@@ -87,7 +87,6 @@ const Register = () => {
                 res => {
                     setSubmissionResponse(res.data.reply)
                     login({email: email.current.value, password: password.current.value})
-                    nav('/1/')
                 }
             ).catch(
                 error => console.log(error)

@@ -374,6 +374,23 @@ def get_sections():
         return jsonify({row[0]: row[1] for row in rows})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+    
+@app.route('/api/get/teacher-course', methods=['POST'])
+def get_teacher_course():
+    data = request.json
+    user_id = data.get('user_id')
+
+    try:
+        result = handler.get_teacher_course(user_id)
+        if result:
+            return jsonify(result)  # Will return {"course_id": x, "teacher_id": y}
+        else:
+            return jsonify({})  # Not a teacher
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 
 

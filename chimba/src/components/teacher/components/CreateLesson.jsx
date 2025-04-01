@@ -10,109 +10,87 @@ import { ConversationPreview } from './ConversationPreview';
 
 
 const dummyLessonData = {
-  title: 'Amor propio y autopercepción 💭',
-  level: 'C2',
-  section: 'Identity & Emotions',
-  objective: 'Reflexionar sobre la relación entre autopercepción, autoestima y amor propio, explorando matices lingüísticos y expresiones profundas del español colombiano.',
-  videoURL: 'https://www.youtube.com/embed/hTWKbfoikeg',
-  audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  title: 'Lunfardo Intermedio: El bondi, la guita y más 🚍💸',
+  level: 'C1',
+  section: 'Urban Life & Colloquialisms',
+  objective: 'Comprehend deeper Lunfardo expressions tied to city life, money, and public transport.',
+  videoURL: 'https://www.youtube.com/embed/avJL8Hw2mFE',
+  audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
   dialogue: [
-    { id: '1', type: 'message', speaker: 'A', text: 'Últimamente he pensado que el amor propio es una construcción más que una condición.' },
-    { id: '2', type: 'message', speaker: 'B', text: '¿Y eso por qué? ¿Sentís que no te querés lo suficiente?' },
-    { id: '3', type: 'message', speaker: 'A', text: 'No es falta de cariño, es que a veces me exijo tanto que olvido reconocer mis logros.' },
-    { id: '4', type: 'question', text: '¿Qué quiere decir "me exijo tanto que olvido reconocer mis logros"?', 
-      options: ['Que no trabaja', 'Que se critica mucho', 'Que no tiene metas', 'Que no valora a otros'], 
-      correctOption: 1 },
-    { id: '5', type: 'message', speaker: 'B', text: 'Eso nos pasa a muchos. La autoexigencia, cuando se desborda, puede volverse una trampa.' },
-    { id: '6', type: 'message', speaker: 'A', text: 'Total. Y más en una sociedad que romantiza la productividad a costa del bienestar.' },
-    { id: '7', type: 'question', text: '¿Qué significa "romantiza la productividad"?', 
-      options: ['La ve con escepticismo', 'La critica constantemente', 'La idealiza y exagera su valor', 'La considera irrelevante'], 
-      correctOption: 2 },
-    { id: '8', type: 'message', speaker: 'B', text: 'Sí, pareciera que descansar fuera sinónimo de pereza.' },
-    { id: '9', type: 'message', speaker: 'A', text: 'Por eso he empezado a cultivar la autocompasión. No como excusa, sino como herramienta de equilibrio.' },
-    { id: '10', type: 'question', text: '¿Cuál es el enfoque de A hacia la autocompasión?', 
-      options: ['La ve como debilidad', 'La usa para evitar responsabilidades', 'La ve como una herramienta positiva', 'No cree en ella'], 
-      correctOption: 2 },
-    { id: '11', type: 'message', speaker: 'B', text: 'Eso suena maduro. ¿Y cómo lo practicas en lo cotidiano?' },
-    { id: '12', type: 'message', speaker: 'A', text: 'Celebrando los avances pequeños, hablándome bonito y poniendo límites sanos.' },
-    { id: '13', type: 'message', speaker: 'B', text: 'Uf, poner límites. Esa es la parte más difícil para muchos.' },
-    { id: '14', type: 'message', speaker: 'A', text: 'Claro. Porque nos educaron a complacer, no a priorizarnos sin culpa.' },
-    { id: '15', type: 'question', text: '¿Qué implica "priorizarnos sin culpa"?', 
-      options: ['Ser egoístas', 'Ignorar a los demás', 'Cuidarse sin sentirse mal por ello', 'No tener emociones'], 
-      correctOption: 2 },
-    { id: '16', type: 'message', speaker: 'B', text: 'Qué belleza eso. Me inspiras a repensar cómo me trato a mí mismo.' },
-    { id: '17', type: 'message', speaker: 'A', text: 'Eso es lo bonito de hablar desde la vulnerabilidad, ¿cierto? Nos espejamos.' }
+    { id: '1', type: 'message', speaker: 'A', text: 'Hoy el bondi venía hasta las manos. No entraba un alfiler.' },
+    { id: '2', type: 'message', speaker: 'B', text: '¡Ni me digas! Encima justo no tenía saldo en la SUBE y tuve que garpar con monedas.' },
+    { id: '3', type: 'question', text: '¿Qué significa "garpar"?',
+      options: ['Cantar', 'Pagar', 'Molestar', 'Tirar'], correctOption: 1 },
+    { id: '4', type: 'message', speaker: 'A', text: 'Y sí, todo por ahorrar un mango. Estoy en la lona.' },
+    { id: '5', type: 'question', text: '¿Qué quiere decir "estar en la lona"?',
+      options: ['Estar deprimido', 'Estar sin dinero', 'Estar enamorado', 'Estar de vacaciones'], correctOption: 1 },
+    { id: '6', type: 'message', speaker: 'B', text: 'Te entiendo. Yo también estoy con la soga al cuello este mes.' },
+    { id: '7', type: 'message', speaker: 'A', text: 'Pero bueno, al menos llegué al laburo sin que me pique el guarda.' },
+    { id: '8', type: 'question', text: '¿Qué significa "me pique el guarda"?',
+      options: ['Que me hable', 'Que me vea sin pagar', 'Que me cobre de más', 'Que me eche del bondi'], correctOption: 1 },
+    { id: '9', type: 'message', speaker: 'B', text: 'Jajaja, ¡zafaste! Eso sí que es tener suerte.' }
   ],
   vocabulary: [
-    { id: '1', term: 'Autoexigencia', meaning: 'Tendencia a exigirse mucho a uno mismo' },
-    { id: '2', term: 'Romantizar', meaning: 'Idealizar algo, ver solo lo positivo de manera exagerada' },
-    { id: '3', term: 'Autocompasión', meaning: 'Trato amable y comprensivo hacia uno mismo en momentos de dificultad' },
-    { id: '4', term: 'Ponerse límites sanos', meaning: 'Establecer barreras personales para cuidar el bienestar emocional' },
-    { id: '5', term: 'Espejarnos', meaning: 'Ver en otro un reflejo de lo propio, especialmente emociones o procesos internos' }
+    { term: 'Bondi', meaning: 'Colectivo (autobús)' },
+    { term: 'Garpar', meaning: 'Pagar (informal)' },
+    { term: 'Estar en la lona', meaning: 'Estar sin dinero' },
+    { term: 'Mango', meaning: 'Dinero (informal)' },
+    { term: 'Guarda', meaning: 'Revisor del colectivo' }
   ],
-  culturalNote: 'En Colombia, el discurso sobre el amor propio ha ganado fuerza en círculos jóvenes y académicos, especialmente en redes sociales. Sin embargo, también persiste la presión cultural por ser siempre alegre, productivo y servicial. Las nuevas generaciones están comenzando a resignificar palabras como "autocompasión" y a cuestionar la idealización del sacrificio.',
-  writtenExercise: 'Escribe una reflexión corta (100-150 palabras) sobre cómo manejás tu autoexigencia. Usa al menos tres palabras del vocabulario de esta lección.',
+  culturalNote: 'Lunfardo sigue vivo en la jerga urbana de Buenos Aires. Muchos términos aparecen incluso en canciones de tango y trap argentino. El transporte público y la economía diaria son temas comunes donde el lunfardo florece.',
+  writtenExercise: 'Escribí una mini historia sobre un día complicado usando al menos cuatro palabras de lunfardo de esta lección.',
   quiz: [
     {
       id: 'q1', type: 'translate_es',
-      question: 'Translate to Spanish: "I am learning to speak to myself with compassion."',
-      correctAnswer: 'Estoy aprendiendo a hablarme con compasión.'
+      question: 'Translate to Spanish: "I had no money left."',
+      correctAnswer: 'Estaba en la lona.'
     },
     {
       id: 'q2', type: 'true_false',
-      question: 'Romantizar algo implica verlo desde una perspectiva crítica.',
+      question: 'Bondi es una forma informal de decir “auto”.',
       correctAnswer: false
     },
     {
       id: 'q3', type: 'fill_blank',
-      question: 'Cuando alguien "se ________", se exige demasiado a sí mismo.',
-      correctAnswer: 'autoexige'
+      question: 'Tuve que ______ con monedas.',
+      correctAnswer: 'garpar'
     },
     {
       id: 'q4', type: 'word_blocks',
       question: 'Reorganiza la frase:',
-      correctAnswer: 'La autocompasión no es debilidad.',
-      blocks: ['La', 'autocompasión', 'no', 'es', 'debilidad.']
+      correctAnswer: 'Estoy en la lona.',
+      blocks: ['Estoy', 'en', 'la', 'lona.']
     },
     {
       id: 'q5', type: 'translate_en',
-      question: 'Traduce al inglés: "Ponerse límites sanos."',
-      correctAnswer: 'Setting healthy boundaries.'
+      question: 'Traduce al inglés: "El guarda me picó."',
+      correctAnswer: 'The inspector saw me.'
     },
     {
       id: 'q6', type: 'audio_type',
-      question: 'Escucha y escribe lo que oyes.',
-      correctAnswer: 'Celebrando los avances pequeños.',
-      audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'
+      question: 'Escuchá y escribí lo que oís.',
+      correctAnswer: 'No tenía un mango.',
+      audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3'
     },
     {
       id: 'q7', type: 'true_false',
-      question: 'La autocompasión implica evadir los problemas.',
+      question: '“Mango” significa fruta en el lunfardo.',
       correctAnswer: false
     },
     {
       id: 'q8', type: 'matching_pairs',
-      question: 'Relaciona las expresiones con su significado:',
+      question: 'Relacioná las expresiones con su significado:',
       pairs: [
-        { left: 'Autoexigencia', right: 'Presión personal constante' },
-        { left: 'Romantizar', right: 'Idealizar de forma irreal' },
-        { left: 'Ponerse límites sanos', right: 'Cuidarse emocionalmente' },
-        { left: 'Espejarnos', right: 'Reflejarse en otro' }
+        { left: 'Garpar', right: 'Pagar' },
+        { left: 'Bondi', right: 'Colectivo' },
+        { left: 'Estar en la lona', right: 'Sin plata' },
+        { left: 'Guarda', right: 'Inspector del bus' }
       ]
-    },
-    {
-      id: 'q9', type: 'image_question',
-      question: '¿Qué representa esta imagen?',
-      correctAnswer: 'Amor propio',
-      imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Self_love_handwritten.jpg/800px-Self_love_handwritten.jpg'
-    },
-    {
-      id: 'q10', type: 'translate_es',
-      question: 'Translate to Spanish: "Sometimes I forget to celebrate my small wins."',
-      correctAnswer: 'A veces olvido celebrar mis pequeños logros.'
     }
   ]
 };
+
+
 
 
 
@@ -304,14 +282,14 @@ const CreateLesson = () => {
   const [newVocab, setNewVocab] = useState({ term: '', meaning: '' });
   const [showMatching, setShowMatching] = useState(false);
 
-  const { user } = useAuth()
+  const { teacherId, selectedCourse } = useAuth()
 
   const submitLessonToBackend = async () => {
     try {
       const response = await axios.post('/api/set/lesson', {
         lesson: lessonData,
-        teacherId: 1,   // replace with actual teacherId from auth context or props
-        courseId: 1     // replace with actual courseId from course selector
+        teacherId: teacherId,   // replace with actual teacherId from auth context or props
+        courseId: selectedCourse     // replace with actual courseId from course selector
       });
   
       console.log(response.data.reply);

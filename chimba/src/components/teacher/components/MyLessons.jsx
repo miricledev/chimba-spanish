@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import LessonCard from './LessonCard';
 import CreateLesson from './CreateLesson';
+import { useAuth } from '../../authorisation/AuthProvider';
 
 const sectionLookup = {
   1: 'Food & Drink',
@@ -23,11 +24,13 @@ const MyLessons = () => {
 
   const [sectionLookup, setSectionLookup] = useState({});
 
+  const { selectedCourse } = useAuth()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [lessonsRes, sectionsRes] = await Promise.all([
-          axios.post('/api/get/lessons', { course_id: 1 }),
+          axios.post('/api/get/lessons', { course_id: selectedCourse }),
           axios.get('/api/get/sections'),
         ]);
 

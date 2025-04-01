@@ -504,6 +504,27 @@ class DBHandler:
             raise Exception("No database connection")
         self.cursor.execute("DELETE FROM lessons WHERE lesson_id = %s;", (lesson_id,))
         self.connection.commit()
+        
+        
+        
+        
+    def get_teacher_course(self, user_id):
+        if not self.verify_connection:
+            raise Exception("No database connection")
+
+        self.cursor.execute("""
+            SELECT course_id, teacher_id
+            FROM teachers
+            WHERE user_id = %s;
+        """, (user_id,))
+
+        row = self.cursor.fetchone()
+        if row:
+            return {"course_id": row[0], "teacher_id": row[1]}
+        else:
+            return None
+
+
 
 
 
