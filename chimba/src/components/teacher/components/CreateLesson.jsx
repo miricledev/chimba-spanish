@@ -6,117 +6,114 @@ import QuizRenderer from './QuizRenderer';
 import MatchingGame from './utilities/MatchingGame';
 import axios from 'axios';
 import { useAuth } from '../../authorisation/AuthProvider'
+import { ConversationPreview } from './ConversationPreview';
 
 
 const dummyLessonData = {
-  title: 'Enamorarse al estilo colombiano 💘',
-  level: 'B2',
-  section: 'Love & Relationships',
-  objective: 'Explorar expresiones, vocabulario y matices culturales del amor en Colombia, especialmente entre los jóvenes.',
-  videoURL: 'https://www.youtube.com/embed/3GwjfUFyY6M',
-  audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  title: 'Amor propio y autopercepción 💭',
+  level: 'C2',
+  section: 'Identity & Emotions',
+  objective: 'Reflexionar sobre la relación entre autopercepción, autoestima y amor propio, explorando matices lingüísticos y expresiones profundas del español colombiano.',
+  videoURL: 'https://www.youtube.com/embed/hTWKbfoikeg',
+  audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
   dialogue: [
-    { id: '1', type: 'message', speaker: 'A', text: 'Parce, anoche conocí a alguien que me dejó sin palabras.' },
-    { id: '2', type: 'message', speaker: 'B', text: '¿Otra vez? ¿Y esta qué tiene de especial?' },
-    { id: '3', type: 'message', speaker: 'A', text: 'No sé… su forma de hablar, su risa, todo. Me flechó.' },
-    { id: '4', type: 'question', text: '¿Qué significa "me flechó"?', options: ['Me disparó', 'Me ignoró', 'Me enamoró', 'Me insultó'], correctOption: 2 },
-    { id: '5', type: 'message', speaker: 'B', text: '¿Y ya hablaron? ¿Qué le dijiste?' },
-    { id: '6', type: 'message', speaker: 'A', text: 'Le dije que tenía la sonrisa más bonita que había visto.' },
-    { id: '7', type: 'message', speaker: 'B', text: 'Uy, qué cursi. ¿Y funcionó?' },
-    { id: '8', type: 'message', speaker: 'A', text: '¡Pues me sonrió y me pidió el Instagram! ¿Eso cuenta?' },
-    { id: '9', type: 'question', text: '¿Qué indica que la otra persona estaba interesada?', options: ['Le pidió su número', 'Lo ignoró', 'Pidió su Instagram', 'Le dijo adiós'], correctOption: 2 },
-    { id: '10', type: 'message', speaker: 'B', text: 'Obvio que sí. ¿Y qué han hablado desde entonces?' },
-    { id: '11', type: 'message', speaker: 'A', text: 'De todo un poco… pero sobre todo de la vida, los sueños, el amor.' },
-    { id: '12', type: 'message', speaker: 'B', text: 'Parce, vas en serio. ¿Ya estás tragado?' },
-    { id: '13', type: 'question', text: '¿Qué significa "estar tragado"?', options: ['Estar enfermo', 'Estar enamorado', 'Estar confundido', 'Estar ocupado'], correctOption: 1 },
-    { id: '14', type: 'message', speaker: 'A', text: 'No sé si decir tragado… pero sí me tiene pensando todo el día.' },
-    { id: '15', type: 'message', speaker: 'B', text: 'Pues a ver si esta vez no te rompen el corazón.' },
-    { id: '16', type: 'message', speaker: 'A', text: 'Tranquilo, esta vez voy con calma. Sin idealizar.' },
-    { id: '17', type: 'question', text: '¿Qué significa "idealizar" en una relación?', options: ['Criticar a la persona', 'Verla de forma perfecta', 'Mentirle', 'No hablarle'], correctOption: 1 },
-    { id: '18', type: 'message', speaker: 'B', text: 'Eso. Amor con los pies en la tierra. Me gusta ese enfoque.' },
-    { id: '19', type: 'message', speaker: 'A', text: 'Y vos, ¿hace cuánto no te enamorás?' },
-    { id: '20', type: 'message', speaker: 'B', text: 'Hace rato, parce. Pero no pierdo la fe. Uno nunca sabe.' },
-    { id: '21', type: 'message', speaker: 'A', text: '¿Y si te enamoras de una amiga?' },
-    { id: '22', type: 'message', speaker: 'B', text: 'Uy… eso sí es otro cuento. Se puede complicar todo.' },
-    { id: '23', type: 'question', text: '¿Por qué se considera complicado enamorarse de una amiga?', options: ['Porque vive lejos', 'Porque no es atractiva', 'Porque se puede arruinar la amistad', 'Porque ya tiene novio'], correctOption: 2 },
-    { id: '24', type: 'message', speaker: 'A', text: 'Pero bueno… así es el amor. A veces llega de la forma menos esperada.' },
-    { id: '25', type: 'message', speaker: 'B', text: 'Y cuando llega, que sea con todo el flow paisa, ¿no?' },
+    { id: '1', type: 'message', speaker: 'A', text: 'Últimamente he pensado que el amor propio es una construcción más que una condición.' },
+    { id: '2', type: 'message', speaker: 'B', text: '¿Y eso por qué? ¿Sentís que no te querés lo suficiente?' },
+    { id: '3', type: 'message', speaker: 'A', text: 'No es falta de cariño, es que a veces me exijo tanto que olvido reconocer mis logros.' },
+    { id: '4', type: 'question', text: '¿Qué quiere decir "me exijo tanto que olvido reconocer mis logros"?', 
+      options: ['Que no trabaja', 'Que se critica mucho', 'Que no tiene metas', 'Que no valora a otros'], 
+      correctOption: 1 },
+    { id: '5', type: 'message', speaker: 'B', text: 'Eso nos pasa a muchos. La autoexigencia, cuando se desborda, puede volverse una trampa.' },
+    { id: '6', type: 'message', speaker: 'A', text: 'Total. Y más en una sociedad que romantiza la productividad a costa del bienestar.' },
+    { id: '7', type: 'question', text: '¿Qué significa "romantiza la productividad"?', 
+      options: ['La ve con escepticismo', 'La critica constantemente', 'La idealiza y exagera su valor', 'La considera irrelevante'], 
+      correctOption: 2 },
+    { id: '8', type: 'message', speaker: 'B', text: 'Sí, pareciera que descansar fuera sinónimo de pereza.' },
+    { id: '9', type: 'message', speaker: 'A', text: 'Por eso he empezado a cultivar la autocompasión. No como excusa, sino como herramienta de equilibrio.' },
+    { id: '10', type: 'question', text: '¿Cuál es el enfoque de A hacia la autocompasión?', 
+      options: ['La ve como debilidad', 'La usa para evitar responsabilidades', 'La ve como una herramienta positiva', 'No cree en ella'], 
+      correctOption: 2 },
+    { id: '11', type: 'message', speaker: 'B', text: 'Eso suena maduro. ¿Y cómo lo practicas en lo cotidiano?' },
+    { id: '12', type: 'message', speaker: 'A', text: 'Celebrando los avances pequeños, hablándome bonito y poniendo límites sanos.' },
+    { id: '13', type: 'message', speaker: 'B', text: 'Uf, poner límites. Esa es la parte más difícil para muchos.' },
+    { id: '14', type: 'message', speaker: 'A', text: 'Claro. Porque nos educaron a complacer, no a priorizarnos sin culpa.' },
+    { id: '15', type: 'question', text: '¿Qué implica "priorizarnos sin culpa"?', 
+      options: ['Ser egoístas', 'Ignorar a los demás', 'Cuidarse sin sentirse mal por ello', 'No tener emociones'], 
+      correctOption: 2 },
+    { id: '16', type: 'message', speaker: 'B', text: 'Qué belleza eso. Me inspiras a repensar cómo me trato a mí mismo.' },
+    { id: '17', type: 'message', speaker: 'A', text: 'Eso es lo bonito de hablar desde la vulnerabilidad, ¿cierto? Nos espejamos.' }
   ],
   vocabulary: [
-    { id: '1', term: 'Flechó', meaning: 'Enamoró de golpe, como por flechazo' },
-    { id: '2', term: 'Cursi', meaning: 'Demasiado romántico o sentimental' },
-    { id: '3', term: 'Tragado', meaning: 'Muy enamorado (coloquial)' },
-    { id: '4', term: 'Idealizar', meaning: 'Ver a alguien de forma perfecta, sin defectos' },
-    { id: '5', term: 'Con calma', meaning: 'Con paciencia, sin apresurarse' },
-    { id: '6', term: 'Romper el corazón', meaning: 'Causar mucho dolor emocional' },
-    { id: '7', term: 'Con los pies en la tierra', meaning: 'Ser realista' },
-    { id: '8', term: 'Flow paisa', meaning: 'Estilo o encanto característico de los paisas' },
-    { id: '9', term: 'Parce', meaning: 'Amigo o amiga (coloquial paisa)' },
-    { id: '10', term: 'Otro cuento', meaning: 'Una situación totalmente diferente o complicada' }
+    { id: '1', term: 'Autoexigencia', meaning: 'Tendencia a exigirse mucho a uno mismo' },
+    { id: '2', term: 'Romantizar', meaning: 'Idealizar algo, ver solo lo positivo de manera exagerada' },
+    { id: '3', term: 'Autocompasión', meaning: 'Trato amable y comprensivo hacia uno mismo en momentos de dificultad' },
+    { id: '4', term: 'Ponerse límites sanos', meaning: 'Establecer barreras personales para cuidar el bienestar emocional' },
+    { id: '5', term: 'Espejarnos', meaning: 'Ver en otro un reflejo de lo propio, especialmente emociones o procesos internos' }
   ],
-  culturalNote: 'En Colombia, especialmente en la región paisa, hablar del amor involucra muchas expresiones coloquiales. Estar "tragado" o ser "cursi" son palabras comunes entre los jóvenes. A menudo, las relaciones empiezan por redes sociales como Instagram. Además, los paisas suelen usar frases como "me flechó" o "me rompió el corazón" con gran emotividad. Hablar del amor con sinceridad, sin tapujos, es parte del estilo colombiano.',
-  writtenExercise: 'Escribe un diálogo entre dos amigos hablando de una persona que les gusta. Usa al menos cinco expresiones del vocabulario aprendido.',
+  culturalNote: 'En Colombia, el discurso sobre el amor propio ha ganado fuerza en círculos jóvenes y académicos, especialmente en redes sociales. Sin embargo, también persiste la presión cultural por ser siempre alegre, productivo y servicial. Las nuevas generaciones están comenzando a resignificar palabras como "autocompasión" y a cuestionar la idealización del sacrificio.',
+  writtenExercise: 'Escribe una reflexión corta (100-150 palabras) sobre cómo manejás tu autoexigencia. Usa al menos tres palabras del vocabulario de esta lección.',
   quiz: [
     {
       id: 'q1', type: 'translate_es',
-      question: 'Translate to Spanish: "He broke my heart."',
-      correctAnswer: 'Me rompió el corazón.'
+      question: 'Translate to Spanish: "I am learning to speak to myself with compassion."',
+      correctAnswer: 'Estoy aprendiendo a hablarme con compasión.'
     },
     {
       id: 'q2', type: 'true_false',
-      question: 'La expresión "estar tragado" significa estar confundido.',
+      question: 'Romantizar algo implica verlo desde una perspectiva crítica.',
       correctAnswer: false
     },
     {
       id: 'q3', type: 'fill_blank',
-      question: 'Cuando alguien te "______", significa que te enamoró repentinamente.',
-      correctAnswer: 'flechó'
+      question: 'Cuando alguien "se ________", se exige demasiado a sí mismo.',
+      correctAnswer: 'autoexige'
     },
     {
       id: 'q4', type: 'word_blocks',
-      question: 'Reorganiza para formar la frase: ',
-      correctAnswer: 'Estoy tragado de ella.',
-      blocks: ['Estoy', 'tragado', 'de', 'ella.']
+      question: 'Reorganiza la frase:',
+      correctAnswer: 'La autocompasión no es debilidad.',
+      blocks: ['La', 'autocompasión', 'no', 'es', 'debilidad.']
     },
     {
       id: 'q5', type: 'translate_en',
-      question: 'Traduce al inglés: "Con los pies en la tierra."',
-      correctAnswer: 'With your feet on the ground.'
+      question: 'Traduce al inglés: "Ponerse límites sanos."',
+      correctAnswer: 'Setting healthy boundaries.'
     },
     {
       id: 'q6', type: 'audio_type',
       question: 'Escucha y escribe lo que oyes.',
-      correctAnswer: 'Me pidió el Instagram.',
-      audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
+      correctAnswer: 'Celebrando los avances pequeños.',
+      audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'
     },
     {
       id: 'q7', type: 'true_false',
-      question: 'Los paisas usan mucho la palabra "parce".',
-      correctAnswer: true
+      question: 'La autocompasión implica evadir los problemas.',
+      correctAnswer: false
     },
     {
       id: 'q8', type: 'matching_pairs',
       question: 'Relaciona las expresiones con su significado:',
       pairs: [
-        { left: 'Cursi', right: 'Demasiado romántico' },
-        { left: 'Otro cuento', right: 'Complicado' },
-        { left: 'Tragado', right: 'Muy enamorado' },
-        { left: 'Flechó', right: 'Enamoró' }
+        { left: 'Autoexigencia', right: 'Presión personal constante' },
+        { left: 'Romantizar', right: 'Idealizar de forma irreal' },
+        { left: 'Ponerse límites sanos', right: 'Cuidarse emocionalmente' },
+        { left: 'Espejarnos', right: 'Reflejarse en otro' }
       ]
     },
     {
       id: 'q9', type: 'image_question',
       question: '¿Qué representa esta imagen?',
-      correctAnswer: 'Amor a primera vista',
-      imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Love_at_first_sight.jpg/800px-Love_at_first_sight.jpg'
+      correctAnswer: 'Amor propio',
+      imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Self_love_handwritten.jpg/800px-Self_love_handwritten.jpg'
     },
     {
       id: 'q10', type: 'translate_es',
-      question: 'Translate to Spanish: "Love arrives when you least expect it."',
-      correctAnswer: 'El amor llega cuando menos lo esperas.'
+      question: 'Translate to Spanish: "Sometimes I forget to celebrate my small wins."',
+      correctAnswer: 'A veces olvido celebrar mis pequeños logros.'
     }
   ]
 };
+
 
 
 // Dialogue Editor Component
@@ -300,155 +297,6 @@ const DialogueEditor = ({ dialogue, setDialogue }) => {
   );
 };
 
-// Interactive conversation preview with step-by-step reveal
-const ConversationPreview = ({ dialogue }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false);
-  
-  const currentItem = dialogue[currentIndex];
-  const isLastItem = currentIndex === dialogue.length - 1;
-  
-  const handleNext = () => {
-    if (currentIndex < dialogue.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setSelectedOption(null);
-      setShowFeedback(false);
-    }
-  };
-  
-  const checkAnswer = () => {
-    if (selectedOption !== null) {
-      setShowFeedback(true);
-    }
-  };
-  
-  if (!dialogue.length) return <p>No conversation added yet.</p>;
-  
-  return (
-    <div className="p-6 border-2 rounded-3xl bg-white">
-      <div className="space-y-4 mb-4">
-        {dialogue.slice(0, currentIndex + 1).map((item, idx) => (
-          <div key={idx} className="transition-all duration-300 ease-in-out">
-            {item.type === 'message' ? (
-              <div className={`max-w-[70%] w-fit px-4 py-2 rounded-xl text-white ${
-                item.speaker === 'A' ? 'bg-(--primary) self-start' : 'bg-gray-400 self-end ml-auto'
-              }`}>
-                <strong>{item.speaker}:</strong> {item.text}
-              </div>
-            ) : (
-              idx === currentIndex && (
-                <div className="w-full p-5 bg-yellow-50 rounded-xl border border-yellow-200 shadow-md">
-                  <p className="font-bold text-gray-800 text-lg mb-3">❓ {item.text}</p>
-                  
-                  <div className="space-y-2 mb-4">
-                    {item.options.map((option, optIdx) => (
-                      <button
-                        key={optIdx}
-                        onClick={() => setSelectedOption(optIdx)}
-                        disabled={showFeedback}
-                        className={`w-full text-left p-3 rounded-lg border transition-all ${
-                          selectedOption === optIdx
-                            ? 'border-(--primary) bg-(--primary-light)'
-                            : 'border-gray-300 hover:border-gray-400'
-                        } ${
-                          showFeedback && optIdx === item.correctOption
-                            ? 'bg-green-100 border-green-500'
-                            : showFeedback && optIdx === selectedOption && optIdx !== item.correctOption
-                            ? 'bg-red-100 border-red-500'
-                            : ''
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <span className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-200 mr-2">
-                            {String.fromCharCode(65 + optIdx)}
-                          </span>
-                          {option}
-                          {showFeedback && optIdx === item.correctOption && (
-                            <FaCheck className="ml-auto text-green-600" />
-                          )}
-                          {showFeedback && optIdx === selectedOption && optIdx !== item.correctOption && (
-                            <FaTimes className="ml-auto text-red-600" />
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {!showFeedback ? (
-                    <button
-                      onClick={checkAnswer}
-                      disabled={selectedOption === null}
-                      className={`w-full py-2 rounded-md text-white font-medium transition-all ${
-                        selectedOption === null
-                          ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-(--primary) hover:brightness-90'
-                      }`}
-                    >
-                      Check Answer
-                    </button>
-                  ) : (
-                    <div className={`p-3 rounded-md ${
-                      selectedOption === item.correctOption
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      <p className="font-medium">
-                        {selectedOption === item.correctOption
-                          ? '✅ Correct! Great job!'
-                          : `❌ Not quite. The correct answer is: ${item.options[item.correctOption]}`}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )
-            )}
-          </div>
-        ))}
-      </div>
-      
-      {!isLastItem && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={handleNext}
-            disabled={currentItem.type === 'question' && !showFeedback}
-            className={`flex items-center gap-2 px-6 py-2 rounded-full font-medium transition-all ${
-              currentItem.type === 'question' && !showFeedback
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-(--primary) text-white hover:brightness-90 shadow-md hover:shadow-lg'
-            }`}
-          >
-            Next <FaArrowRight />
-          </button>
-        </div>
-      )}
-      
-      {isLastItem && currentItem.type === 'question' && !showFeedback && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={checkAnswer}
-            disabled={selectedOption === null}
-            className={`w-48 py-2 rounded-md text-white font-medium transition-all ${
-              selectedOption === null
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-(--primary) hover:brightness-90'
-            }`}
-          >
-            Check Answer
-          </button>
-        </div>
-      )}
-      
-      {isLastItem && (showFeedback || currentItem.type === 'message') && (
-        <div className="flex justify-center mt-6">
-          <div className="px-6 py-3 bg-gray-100 rounded-full text-gray-700">
-            End of conversation 🎉
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const CreateLesson = () => {
   const [lessonData, setLessonData] = useState(dummyLessonData);

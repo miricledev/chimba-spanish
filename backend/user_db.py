@@ -424,17 +424,80 @@ class DBHandler:
     def get_lessons_by_course(self, course_id):
         if not self.verify_connection:
             raise Exception("No database connection")
-        
+
+        # Step 1: Get base lesson data
         self.cursor.execute("""
-            SELECT l.lesson_id, l.title, l.level, l.objective, l.video_url, s.title AS section_title
+            SELECT l.lesson_id, l.title, l.level, l.objective, l.video_url, l.audio_url,
+                l.cultural_note, l.written_exercise,
+                s.title AS section, c.title AS course
             FROM lessons l
             JOIN sections s ON l.section_id = s.section_id
+            JOIN courses c ON l.course_id = c.course_id
             WHERE l.course_id = %s;
         """, (course_id,))
         
         rows = self.cursor.fetchall()
         columns = [desc[0] for desc in self.cursor.description]
-        return [dict(zip(columns, row)) for row in rows]
+        lessons = [dict(zip(columns, row)) for row in rows]
+
+        # Step 2: For each lesson, get dialogue, vocabulary, and quiz
+        for lesson in lessons:
+            lesson_id = lesson['lesson_id']
+
+            # Fetch dialogue
+            self.cursor.execute("""
+                SELECT type, speaker, text, options, correct_option
+                FROM lesson_dialogue
+                WHERE lesson_id = %s
+                ORDER BY dialogue_id ASC;
+            """, (lesson_id,))
+            lesson['dialogue'] = [
+                {
+                    'type': r[0],
+                    'speaker': r[1],
+                    'text': r[2],
+                    'options': r[3],
+                    'correctOption': r[4]
+                } for r in self.cursor.fetchall()
+            ]
+
+            # Fetch vocabulary
+            self.cursor.execute("""
+                SELECT term, meaning
+                FROM lesson_vocabulary
+                WHERE lesson_id = %s;
+            """, (lesson_id,))
+            lesson['vocabulary'] = [{'term': r[0], 'meaning': r[1]} for r in self.cursor.fetchall()]
+
+            # Fetch quiz
+            self.cursor.execute("SELECT quiz_id FROM quizzes WHERE lesson_id = %s;", (lesson_id,))
+            quiz_row = self.cursor.fetchone()
+
+            if quiz_row:
+                quiz_id = quiz_row[0]
+                self.cursor.execute("""
+                    SELECT type, question, correct_answer, blocks, options, pairs, audio_url, image_url
+                    FROM quiz_questions
+                    WHERE quiz_id = %s
+                    ORDER BY question_id ASC;
+                """, (quiz_id,))
+                lesson['quiz'] = [
+                    {
+                        'type': r[0],
+                        'question': r[1],
+                        'correctAnswer': r[2],
+                        'blocks': r[3],
+                        'options': r[4],
+                        'pairs': r[5],
+                        'audioURL': r[6],
+                        'imageURL': r[7],
+                    } for r in self.cursor.fetchall()
+                ]
+            else:
+                lesson['quiz'] = []
+
+        return lessons
+
     
     def delete_lesson(self, lesson_id):
         if not self.verify_connection:

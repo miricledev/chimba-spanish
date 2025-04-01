@@ -29,6 +29,7 @@ import MyLessons from './components/teacher/components/MyLessons'
 import CreateLesson from './components/teacher/components/CreateLesson'
 import QuizRenderer from './components/teacher/components/QuizRenderer'
 import { dummyQuiz } from './components/teacher/components/temp/dummyQuiz'
+import LessonViewer from './components/learning/Lessons/LessonViewer'
 
 const InnerApp = () => {
   const { user } = useAuth();
@@ -40,8 +41,10 @@ const InnerApp = () => {
         {user && user.account_type === 1 && (
           <Route path='1/' element={<AuthorisedPagesProtector />}>
             <Route index element={<Dashboard />} />
+            
             <Route path='learn' element={<LearnSidebar />}>
               <Route index element={<Roadmap />} />
+              <Route path=':lessonId' element={<LessonViewer />} />
               <Route path='select' element={<DialectSelector />} />
               <Route path='flashcards' element={<FlashcardNav />}>
                 <Route index element={<FlashcardApp />} />
