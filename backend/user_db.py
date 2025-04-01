@@ -1,6 +1,8 @@
 import psycopg2
 from dataclasses import dataclass
 import bcrypt
+import json  # add this at the top of user_db.py
+
 
 
 
@@ -311,6 +313,140 @@ class DBHandler:
             rows = self.cursor.fetchall()
 
             return [row[0] for row in rows]  # return just course_id values
+        
+        
+
+    def insert_new_lesson(self, data):
+        if not self.verify_connection:
+            raise Exception("No database connection")
+
+        try:
+            self.connection.rollback()  # In case the previous transaction failed
+
+            # Extract lesson metadata
+            course_id = data['courseId']
+            teacher_id = data['teacherId']
+            lesson = data['lesson']
+
+            title = lesson['title']
+            level = lesson['level']
+            objective = lesson['objective']
+            video_url = lesson['videoURL']
+            audio_url = lesson['audioURL']
+            cultural_note = lesson['culturalNote']
+            written_exercise = lesson['writtenExercise']
+            section_name = lesson['section']
+
+            # Get section_id from sections table
+            self.cursor.execute("SELECT section_id FROM sections WHERE title = %s AND course_id = %s;", (section_name, course_id))
+            section_row = self.cursor.fetchone()
+            if not section_row:
+                raise Exception(f"Section '{section_name}' not found in course {course_id}.")
+            section_id = section_row[0]
+
+            # Insert lesson
+            self.cursor.execute("""
+                INSERT INTO lessons (course_id, teacher_id, title, level, section_id, objective, video_url, audio_url, cultural_note, written_exercise)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING lesson_id;
+            """, (course_id, teacher_id, title, level, section_id, objective, video_url, audio_url, cultural_note, written_exercise))
+            lesson_id = self.cursor.fetchone()[0]
+
+            for item in lesson['dialogue']:
+                if item['type'] == 'message':
+                    self.cursor.execute("""
+                        INSERT INTO lesson_dialogue (lesson_id, type, speaker, text)
+                        VALUES (%s, %s, %s, %s);
+                    """, (
+                        lesson_id,
+                        'message',
+                        item.get('speaker'),
+                        item.get('text')
+                    ))
+                elif item['type'] == 'question':
+                    self.cursor.execute("""
+                        INSERT INTO lesson_dialogue (lesson_id, type, text, options, correct_option)
+                        VALUES (%s, %s, %s, %s, %s);
+                    """, (
+                        lesson_id,
+                        'question',
+                        item.get('text'),
+                        item.get('options', []),  # Already a list, PostgreSQL text[] accepts Python lists
+                        item.get('correctOption')
+                    ))
+                else:
+                    raise Exception(f"Unknown dialogue type: {item['type']}")
+
+
+            # Insert vocabulary
+            for v in lesson['vocabulary']:
+                self.cursor.execute("""
+                    INSERT INTO lesson_vocabulary (lesson_id, term, meaning)
+                    VALUES (%s, %s, %s);
+                """, (lesson_id, v['term'], v['meaning']))
+
+            # Insert one quiz per lesson
+            self.cursor.execute("""
+                INSERT INTO quizzes (lesson_id, title)
+                VALUES (%s, %s)
+                RETURNING quiz_id;
+            """, (lesson_id, 'Main Quiz'))
+
+            quiz_id = self.cursor.fetchone()[0]
+
+            # Now insert each quiz question into quiz_questions
+            for q in lesson['quiz']:
+                self.cursor.execute("""
+                    INSERT INTO quiz_questions (
+                        quiz_id, type, question, correct_answer,
+                        blocks, options, pairs, audio_url, image_url
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                """, (
+                    quiz_id,
+                    q['type'],
+                    q.get('question'),
+                    str(q.get('correctAnswer')) if q.get('correctAnswer') is not None else None,
+                    q.get('blocks'),  # array of strings
+                    q.get('options'),  # array of strings
+                    json.dumps(q.get('pairs')) if q.get('pairs') else None,  # JSONB
+                    q.get('audioURL'),
+                    q.get('imageURL')
+                ))
+
+            self.connection.commit()
+            
+        except Exception as e:
+                self.connection.rollback()
+                raise Exception(f"Error inserting lesson: {str(e)}")
+            
+            
+    def get_lessons_by_course(self, course_id):
+        if not self.verify_connection:
+            raise Exception("No database connection")
+        
+        self.cursor.execute("""
+            SELECT l.lesson_id, l.title, l.level, l.objective, l.video_url, s.title AS section_title
+            FROM lessons l
+            JOIN sections s ON l.section_id = s.section_id
+            WHERE l.course_id = %s;
+        """, (course_id,))
+        
+        rows = self.cursor.fetchall()
+        columns = [desc[0] for desc in self.cursor.description]
+        return [dict(zip(columns, row)) for row in rows]
+    
+    def delete_lesson(self, lesson_id):
+        if not self.verify_connection:
+            raise Exception("No database connection")
+        self.cursor.execute("DELETE FROM lessons WHERE lesson_id = %s;", (lesson_id,))
+        self.connection.commit()
+
+
+
+
+
+
 
 
 

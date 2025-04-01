@@ -64,9 +64,8 @@ const InnerApp = () => {
         {/* Teacher Routes */}
         {user && user.account_type === 2 && (
           <Route path='2/' element={<TeacherSidebar />}>
-            <Route index element={<Dashboard />} /> {/* Replace with TeacherDashboard */}
             <Route path='profile' element={<ViewProfilePage />} />
-            <Route path='my-lessons' element={<MyLessons />} />
+            <Route index element={<MyLessons />} />
             <Route path='create-lesson' element={<CreateLesson />} />
             <Route path="quiz-test" element={<QuizRenderer quiz={dummyQuiz} />} />
 

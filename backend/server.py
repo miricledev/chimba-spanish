@@ -337,6 +337,49 @@ def get_user_course_ids():
     return jsonify(response)
 
 
+@app.route('/api/set/lesson', methods=['POST'])
+def insert_lesson():
+    data = request.json
+    try:
+        handler.insert_new_lesson(data)
+        return jsonify({"reply": "success"})
+    except Exception as e:
+        return jsonify({"reply": str(e)})
+    
+    
+@app.route('/api/get/lessons', methods=['POST'])
+def get_lessons_by_course():
+    data = request.json
+    course_id = data.get('course_id')
+    
+    try:
+        lessons = handler.get_lessons_by_course(course_id)
+        return jsonify(lessons)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/api/delete/lesson/<int:lesson_id>', methods=['DELETE'])
+def delete_lesson(lesson_id):
+    try:
+        handler.delete_lesson(lesson_id)
+        return jsonify({"reply": "Lesson deleted successfully"})
+    except Exception as e:
+        return jsonify({"reply": str(e)}), 500
+    
+@app.route('/api/get/sections', methods=['GET'])
+def get_sections():
+    try:
+        handler.cursor.execute("SELECT section_id, title FROM sections;")
+        rows = handler.cursor.fetchall()
+        return jsonify({row[0]: row[1] for row in rows})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
 
 
     

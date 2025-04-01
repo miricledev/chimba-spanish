@@ -4,139 +4,120 @@ import { v4 as uuidv4 } from 'uuid';
 import { FaTrashAlt, FaCheck, FaTimes, FaArrowRight } from 'react-icons/fa';
 import QuizRenderer from './QuizRenderer';
 import MatchingGame from './utilities/MatchingGame';
+import axios from 'axios';
+import { useAuth } from '../../authorisation/AuthProvider'
+
 
 const dummyLessonData = {
-    title: 'Cómo pedir un tinto como un paisa ☕',
-    level: 'A2',
-    section: 'Food & Drink',
-    objective: 'Aprenderás cómo pedir un café en Medellín usando expresiones auténticas paisas.',
-    videoURL: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    dialogue: [
-      { id: '1', type: 'message', speaker: 'A', text: '¡Quiubo doña Marta! ¿Será que me regala un tintico?' },
-      { id: '2', type: 'message', speaker: 'B', text: '¡Claro que sí, mijo! ¿Con azúcar o sin?' },
-      { id: '3', type: 'question', text: '¿Qué significa "tintico" en este contexto?',
-        options: ['Una bebida alcohólica', 'Un café pequeño', 'Un dulce típico', 'Un color'],
-        correctOption: 1 
-      },
-      { id: '4', type: 'message', speaker: 'A', text: 'Con poquita, porfa. Y si tiene arepita, mejor dicho, una chimba.' },
-      { id: '5', type: 'message', speaker: 'B', text: 'Jajaja, ya mismo le saco su tinto completo.' },
-      { id: '6', type: 'question', text: '¿Por qué dice "regala" cuando en realidad va a pagar por el café?',
-        options: ['Es una expresión de cortesía', 'Espera recibir el café gratis', 'Está confundido', 'Quiere parecer pobre'],
-        correctOption: 0
-      },
-      { id: '7', type: 'message', speaker: 'A', text: 'Doña Marta, ¿y cómo van las ventas hoy?' },
-      { id: '8', type: 'message', speaker: 'B', text: 'Ahí vamos, mijo. Con esta lluvia, la gente prefiere quedarse en casa.' },
-      { id: '9', type: 'question', text: '¿Qué factor está afectando las ventas según doña Marta?',
-        options: ['La economía', 'La competencia', 'El clima', 'La calidad del café'],
-        correctOption: 2
-      },
-      { id: '10', type: 'message', speaker: 'A', text: 'Sí, está cayendo un aguacero tremendo. Pero su cafecito siempre vale la pena.' },
-      { id: '11', type: 'message', speaker: 'B', text: 'Ay, qué pesar. ¿Y qué cuenta? ¿Todo bien con la familia?' },
-      { id: '12', type: 'message', speaker: 'A', text: 'Todo bien, gracias a Dios. Mi hijo mayor se graduó la semana pasada.' },
-      { id: '13', type: 'question', text: '¿Qué significa "qué pesar" en este contexto?',
-        options: ['Es una pena', 'Qué triste', 'Qué bueno', 'Qué interesante'],
-        correctOption: 1
-      },
-      { id: '14', type: 'message', speaker: 'B', text: '¡Qué alegría! Hay que celebrar eso. Le invito una empanada para acompañar su tintico.' },
-      { id: '15', type: 'message', speaker: 'A', text: '¡Uy, qué bacano! Muchas gracias, doña Marta. Usted siempre tan especial.' },
-      { id: '16', type: 'message', speaker: 'B', text: 'Para eso estamos, mijo. Los buenos clientes hay que cuidarlos.' },
-      { id: '17', type: 'question', text: '¿Qué ofrece doña Marta para celebrar la graduación?',
-        options: ['Un descuento', 'Otro café', 'Una empanada', 'Dinero'],
-        correctOption: 2
-      },
-      { id: '18', type: 'message', speaker: 'A', text: 'Bueno, me voy para la oficina. ¿Cuánto le debo?' },
-      { id: '19', type: 'message', speaker: 'B', text: 'Son 5.000 pesos, mijo. Y felicite a su hijo de mi parte.' },
-      { id: '20', type: 'message', speaker: 'A', text: 'Con gusto, doña Marta. Hasta mañana, que esté bien.' },
-      { id: '21', type: 'question', text: '¿Qué expresión utiliza el cliente para despedirse?',
-        options: ['Adiós', 'Chao', 'Hasta mañana', 'Nos vemos'],
-        correctOption: 2
-      }
-    ],
-    vocabulary: [
-      { id: '1', term: 'Tinto', meaning: 'Café negro (sin leche)' },
-      { id: '2', term: 'Quiubo', meaning: '¿Qué hubo? / ¿Qué tal? / Hola' },
-      { id: '3', term: 'Regalar', meaning: 'Dar (en forma muy cortés)' },
-      { id: '4', term: 'Chimba', meaning: 'Genial, excelente (coloquial)' },
-      { id: '5', term: 'Mijo', meaning: 'Mi hijo (afectivo)' },
-      { id: '6', term: 'Aguacero', meaning: 'Lluvia fuerte' },
-      { id: '7', term: 'Qué pesar', meaning: 'Qué lástima, qué pena' },
-      { id: '8', term: 'Bacano', meaning: 'Genial, excelente (coloquial)' }
-    ],
-    culturalNote: 'En Medellín es común pedir el café diciendo "¿me regala un tinto?", una expresión que muestra cercanía y cortesía. Esto refleja el calor humano característico del habla paisa. También es común que los vendedores llamen "mijo" (mi hijo) o "mija" (mi hija) a sus clientes como muestra de afecto, sin importar la edad.',
-    writtenExercise: 'Escribe una conversación en una panadería usando por lo menos tres expresiones del vocabulario aprendido.',
-    quiz: [
-      {
-        id: 'q1',
-        type: 'word_blocks',
-        question: 'Reorganiza para formar la frase:',
-        correctAnswer: '¿Me regala un tintico, porfa?',
-        blocks: ['¿Me', 'regala', 'un', 'tintico,', 'porfa?']
-      },
-      {
-        id: 'q2',
-        type: 'translate_es',
-        question: 'Translate to Spanish: "That is awesome!"',
-        correctAnswer: '¡Qué chimba!'
-      },
-      {
-        id: 'q3',
-        type: 'fill_blank',
-        question: '______ significa "café negro sin leche".',
-        correctAnswer: 'Tinto'
-      },
-      {
-        id: 'q4',
-        type: 'audio_type',
-        question: 'Escucha y escribe lo que oyes.',
-        correctAnswer: '¿Quiubo doña Marta?',
-        audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
-      },
-      {
-        id: 'q5',
-        type: 'true_false',
-        question: 'En Colombia, pedir algo con la expresión "me regala" significa que esperas recibirlo gratis.',
-        correctAnswer: false
-      },
-      {
-        id: 'q6',
-        type: 'matching_pairs',
-        question: 'Conecta estas expresiones colombianas con sus significados:',
-        pairs: [
-          { left: 'Quiubo', right: '¿Qué tal?' },
-          { left: 'Chimba', right: 'Excelente' },
-          { left: 'Qué pesar', right: 'Qué lástima' },
-          { left: 'Bacano', right: 'Genial' }
-        ]
-      },
-      {
-        id: 'q7',
-        type: 'image_question',
-        question: '¿Qué están bebiendo las personas en la imagen?',
-        correctAnswer: 'tinto',
-        imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/800px-A_small_cup_of_coffee.JPG'
-      },
-      {
-        id: 'q8',
-        type: 'translate_en',
-        question: 'Traduce al inglés: "Para eso estamos, mijo."',
-        correctAnswer: "That's what we're here for, my son."
-      },
-      {
-        id: 'q9',
-        type: 'word_blocks',
-        question: 'Forma una oración con las siguientes palabras:',
-        correctAnswer: 'El tinto colombiano es muy rico.',
-        blocks: ['El', 'tinto', 'colombiano', 'es', 'muy', 'rico.']
-      },
-      {
-        id: 'q10',
-        type: 'true_false',
-        question: 'En Medellín, es común llamar "mijo" o "mija" solamente a los niños pequeños.',
-        correctAnswer: false
-      }
-    ]
-  };
+  title: 'Enamorarse al estilo colombiano 💘',
+  level: 'B2',
+  section: 'Love & Relationships',
+  objective: 'Explorar expresiones, vocabulario y matices culturales del amor en Colombia, especialmente entre los jóvenes.',
+  videoURL: 'https://www.youtube.com/embed/3GwjfUFyY6M',
+  audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  dialogue: [
+    { id: '1', type: 'message', speaker: 'A', text: 'Parce, anoche conocí a alguien que me dejó sin palabras.' },
+    { id: '2', type: 'message', speaker: 'B', text: '¿Otra vez? ¿Y esta qué tiene de especial?' },
+    { id: '3', type: 'message', speaker: 'A', text: 'No sé… su forma de hablar, su risa, todo. Me flechó.' },
+    { id: '4', type: 'question', text: '¿Qué significa "me flechó"?', options: ['Me disparó', 'Me ignoró', 'Me enamoró', 'Me insultó'], correctOption: 2 },
+    { id: '5', type: 'message', speaker: 'B', text: '¿Y ya hablaron? ¿Qué le dijiste?' },
+    { id: '6', type: 'message', speaker: 'A', text: 'Le dije que tenía la sonrisa más bonita que había visto.' },
+    { id: '7', type: 'message', speaker: 'B', text: 'Uy, qué cursi. ¿Y funcionó?' },
+    { id: '8', type: 'message', speaker: 'A', text: '¡Pues me sonrió y me pidió el Instagram! ¿Eso cuenta?' },
+    { id: '9', type: 'question', text: '¿Qué indica que la otra persona estaba interesada?', options: ['Le pidió su número', 'Lo ignoró', 'Pidió su Instagram', 'Le dijo adiós'], correctOption: 2 },
+    { id: '10', type: 'message', speaker: 'B', text: 'Obvio que sí. ¿Y qué han hablado desde entonces?' },
+    { id: '11', type: 'message', speaker: 'A', text: 'De todo un poco… pero sobre todo de la vida, los sueños, el amor.' },
+    { id: '12', type: 'message', speaker: 'B', text: 'Parce, vas en serio. ¿Ya estás tragado?' },
+    { id: '13', type: 'question', text: '¿Qué significa "estar tragado"?', options: ['Estar enfermo', 'Estar enamorado', 'Estar confundido', 'Estar ocupado'], correctOption: 1 },
+    { id: '14', type: 'message', speaker: 'A', text: 'No sé si decir tragado… pero sí me tiene pensando todo el día.' },
+    { id: '15', type: 'message', speaker: 'B', text: 'Pues a ver si esta vez no te rompen el corazón.' },
+    { id: '16', type: 'message', speaker: 'A', text: 'Tranquilo, esta vez voy con calma. Sin idealizar.' },
+    { id: '17', type: 'question', text: '¿Qué significa "idealizar" en una relación?', options: ['Criticar a la persona', 'Verla de forma perfecta', 'Mentirle', 'No hablarle'], correctOption: 1 },
+    { id: '18', type: 'message', speaker: 'B', text: 'Eso. Amor con los pies en la tierra. Me gusta ese enfoque.' },
+    { id: '19', type: 'message', speaker: 'A', text: 'Y vos, ¿hace cuánto no te enamorás?' },
+    { id: '20', type: 'message', speaker: 'B', text: 'Hace rato, parce. Pero no pierdo la fe. Uno nunca sabe.' },
+    { id: '21', type: 'message', speaker: 'A', text: '¿Y si te enamoras de una amiga?' },
+    { id: '22', type: 'message', speaker: 'B', text: 'Uy… eso sí es otro cuento. Se puede complicar todo.' },
+    { id: '23', type: 'question', text: '¿Por qué se considera complicado enamorarse de una amiga?', options: ['Porque vive lejos', 'Porque no es atractiva', 'Porque se puede arruinar la amistad', 'Porque ya tiene novio'], correctOption: 2 },
+    { id: '24', type: 'message', speaker: 'A', text: 'Pero bueno… así es el amor. A veces llega de la forma menos esperada.' },
+    { id: '25', type: 'message', speaker: 'B', text: 'Y cuando llega, que sea con todo el flow paisa, ¿no?' },
+  ],
+  vocabulary: [
+    { id: '1', term: 'Flechó', meaning: 'Enamoró de golpe, como por flechazo' },
+    { id: '2', term: 'Cursi', meaning: 'Demasiado romántico o sentimental' },
+    { id: '3', term: 'Tragado', meaning: 'Muy enamorado (coloquial)' },
+    { id: '4', term: 'Idealizar', meaning: 'Ver a alguien de forma perfecta, sin defectos' },
+    { id: '5', term: 'Con calma', meaning: 'Con paciencia, sin apresurarse' },
+    { id: '6', term: 'Romper el corazón', meaning: 'Causar mucho dolor emocional' },
+    { id: '7', term: 'Con los pies en la tierra', meaning: 'Ser realista' },
+    { id: '8', term: 'Flow paisa', meaning: 'Estilo o encanto característico de los paisas' },
+    { id: '9', term: 'Parce', meaning: 'Amigo o amiga (coloquial paisa)' },
+    { id: '10', term: 'Otro cuento', meaning: 'Una situación totalmente diferente o complicada' }
+  ],
+  culturalNote: 'En Colombia, especialmente en la región paisa, hablar del amor involucra muchas expresiones coloquiales. Estar "tragado" o ser "cursi" son palabras comunes entre los jóvenes. A menudo, las relaciones empiezan por redes sociales como Instagram. Además, los paisas suelen usar frases como "me flechó" o "me rompió el corazón" con gran emotividad. Hablar del amor con sinceridad, sin tapujos, es parte del estilo colombiano.',
+  writtenExercise: 'Escribe un diálogo entre dos amigos hablando de una persona que les gusta. Usa al menos cinco expresiones del vocabulario aprendido.',
+  quiz: [
+    {
+      id: 'q1', type: 'translate_es',
+      question: 'Translate to Spanish: "He broke my heart."',
+      correctAnswer: 'Me rompió el corazón.'
+    },
+    {
+      id: 'q2', type: 'true_false',
+      question: 'La expresión "estar tragado" significa estar confundido.',
+      correctAnswer: false
+    },
+    {
+      id: 'q3', type: 'fill_blank',
+      question: 'Cuando alguien te "______", significa que te enamoró repentinamente.',
+      correctAnswer: 'flechó'
+    },
+    {
+      id: 'q4', type: 'word_blocks',
+      question: 'Reorganiza para formar la frase: ',
+      correctAnswer: 'Estoy tragado de ella.',
+      blocks: ['Estoy', 'tragado', 'de', 'ella.']
+    },
+    {
+      id: 'q5', type: 'translate_en',
+      question: 'Traduce al inglés: "Con los pies en la tierra."',
+      correctAnswer: 'With your feet on the ground.'
+    },
+    {
+      id: 'q6', type: 'audio_type',
+      question: 'Escucha y escribe lo que oyes.',
+      correctAnswer: 'Me pidió el Instagram.',
+      audioURL: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
+    },
+    {
+      id: 'q7', type: 'true_false',
+      question: 'Los paisas usan mucho la palabra "parce".',
+      correctAnswer: true
+    },
+    {
+      id: 'q8', type: 'matching_pairs',
+      question: 'Relaciona las expresiones con su significado:',
+      pairs: [
+        { left: 'Cursi', right: 'Demasiado romántico' },
+        { left: 'Otro cuento', right: 'Complicado' },
+        { left: 'Tragado', right: 'Muy enamorado' },
+        { left: 'Flechó', right: 'Enamoró' }
+      ]
+    },
+    {
+      id: 'q9', type: 'image_question',
+      question: '¿Qué representa esta imagen?',
+      correctAnswer: 'Amor a primera vista',
+      imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Love_at_first_sight.jpg/800px-Love_at_first_sight.jpg'
+    },
+    {
+      id: 'q10', type: 'translate_es',
+      question: 'Translate to Spanish: "Love arrives when you least expect it."',
+      correctAnswer: 'El amor llega cuando menos lo esperas.'
+    }
+  ]
+};
+
 
 // Dialogue Editor Component
 const DialogueEditor = ({ dialogue, setDialogue }) => {
@@ -475,7 +456,24 @@ const CreateLesson = () => {
   const [newVocab, setNewVocab] = useState({ term: '', meaning: '' });
   const [showMatching, setShowMatching] = useState(false);
 
+  const { user } = useAuth()
 
+  const submitLessonToBackend = async () => {
+    try {
+      const response = await axios.post('/api/set/lesson', {
+        lesson: lessonData,
+        teacherId: 1,   // replace with actual teacherId from auth context or props
+        courseId: 1     // replace with actual courseId from course selector
+      });
+  
+      console.log(response.data.reply);
+      alert('✅ Lesson saved successfully!');
+    } catch (error) {
+      console.error('Error saving lesson:', error);
+      alert('❌ Error saving lesson. Check console.');
+    }
+  };
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLessonData({ ...lessonData, [name]: value });
@@ -614,7 +612,7 @@ const CreateLesson = () => {
           </div>
 
           <div className="col-span-2 flex justify-center">
-            <button type="submit" className="bg-(--primary) text-white font-semibold py-3 px-6 rounded-md hover:brightness-90 transition duration-200">
+            <button onClick={submitLessonToBackend} className="bg-(--primary) cursor-pointer text-white font-semibold py-3 px-6 rounded-md hover:brightness-90 transition duration-200">
               🚀 Publish Lesson
             </button>
           </div>
